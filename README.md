@@ -1,7 +1,7 @@
 # ToPy #
-## Topology Optimisation using Python ##
+## Topology Optimization using Python ##
 
-Exported from Google Code, nothing more. Please see the wiki branch for now (_not much there_); I'll upload everything in due course when I have a bit more time (I have a 'real' job).
+Exported from Google Code. Please see the wiki branch for now (_not much there_); I'll upload everything in due course when I have a bit more time (I have a 'real' job).
 
 ## Plans (not cast in stone, not necessarily in this order) ##
 1. Upload all the code, and update my contact details.
