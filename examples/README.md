@@ -1,4 +1,4 @@
-Various ToPy examples
+# Various ToPy examples #
 
 Go to the 'scripts' directory and find 'optimise.py' file. This Python script
 reads and loads the TPD (ToPy Problem Definition) file. You can (obviously)
@@ -7,26 +7,21 @@ change 'optimise.py' to suit your needs.
 The 'mbb_beam' directory is probably the best place to start experimenting.
 
 Note to Windows users:
-----------------------
+-------------------------
 You have to copy the 'optimise.py' type files to each example directory. Under
 Linux (and I suspect OS X too) you can make use of symbolic links - I don't know
 if there's a similar mechanism in Windows to accomplish this.
 
-
-===========================
-=== To run the programs ===
-===========================
+# To run the programs #
 In a terminal/console, type:
    python optimise.py <filename>.tpd
 in the relevant example directory.
 
 
-=======================
-=== Animation notes ===
-=======================
+# Animations #
 All 3D animations were created with the help of ParaView 3 and the programs
 mentioned below. In ParaView, save the animation as a sequence of PNG's, or
-directly as an AVI, however, the latter format produces larger files.
+directly as an AVI (produces larger files).
 
 1) GIF's:
 ---------
