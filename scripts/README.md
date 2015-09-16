@@ -22,5 +22,5 @@ or
 nodenums.node_nums_2d?
 nodenums.node_nums_3d?
 
-and read the docsrings.
+and read the docstrings.
 

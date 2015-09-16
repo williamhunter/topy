@@ -1,0 +1,3 @@
+v0.1.1:
+=======
+1) SymPy related: All *_K.py files in data directory, corrected TypeError: 'Symbol' object is not iterable
