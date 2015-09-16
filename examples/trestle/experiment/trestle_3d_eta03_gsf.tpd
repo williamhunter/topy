@@ -1,0 +1,38 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+# 3d cube domain, held at 4 corners all on the same face of cube, pressure load
+# applied to outer face of centre element on opposite side. All corners are
+# held rigidly in place, which means (intuitively) that braces are not needed
+# between the corners to maximise stiffness.
+
+PROB_TYPE  : comp
+PROB_NAME  : trestle_3d_eta03_gsf
+ETA        : 0.3
+DOF_PN     : 3
+VOL_FRAC   : 0.15
+FILT_RAD   : 1.8
+ELEM_K     : H8
+NUM_ELEM_X : 25
+NUM_ELEM_Y : 25
+NUM_ELEM_Z : 25
+FXTR_NODE_X: 1; 26; 651; 676
+FXTR_NODE_Y: 1; 26; 651; 676
+FXTR_NODE_Z: 1; 26; 651; 676
+LOAD_NODE_Z: 17225; 17226; 17251; 17252
+LOAD_VALU_Z: -1; -1; -1; -1
+
+NUM_ITER   : 50
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 15  # num of iters to hold p constant from start
+P_INCR     : 0.2  # increment by this amount
+P_CON      : 1  # increment every 'P_CON' iters
+P_MAX      : 3  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 15  # num of iters to hold q constant from start
+Q_INCR     : 0.05  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 5  # max value of 'Q_CON'

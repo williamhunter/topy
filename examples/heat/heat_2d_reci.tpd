@@ -1,0 +1,21 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+# 'Classic' 40x40 2d plate, as per Ole Sigmund's 91 line code,
+# Matlab command: toph(40, 40, 0.4, 3.0, 1.2)
+
+PROB_TYPE  : heat
+PROB_NAME  : heat_2d_reci
+ETA        : 0.5
+DOF_PN     : 1
+VOL_FRAC   : 0.4
+FILT_RAD   : 1.2
+P_FAC      : 3
+ELEM_K     : Q4T
+NUM_ITER   : 100
+NUM_ELEM_X : 40
+NUM_ELEM_Y : 40
+NUM_ELEM_Z : 0
+FXTR_NODE_X: 19|23
+LOAD_NODE_X: 1|1681
+LOAD_VALU_X: 0.01@1681

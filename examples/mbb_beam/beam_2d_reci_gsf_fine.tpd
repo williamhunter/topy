@@ -1,0 +1,35 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+# The 600x200 2d mbb beam.
+
+PROB_TYPE  : comp
+PROB_NAME  : beam_2d_reci_gsf_fine
+ETA        : 0.5
+DOF_PN     : 2
+VOL_FRAC   : 0.5
+FILT_RAD   : 15
+P_FAC      : 3
+ELEM_K     : Q4
+NUM_ELEM_X : 600
+NUM_ELEM_Y : 200
+NUM_ELEM_Z : 0
+FXTR_NODE_X: 1|201 #  Nodes 1 to (NUM_ELEM_Y + 1), LHS of domain.
+FXTR_NODE_Y: 120801 #  (NUM_ELEM_X + 1) * (NUM_ELEM_Y + 1)
+LOAD_NODE_Y: 1
+LOAD_VALU_Y: -1
+
+NUM_ITER   : 100
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 25  # num of iters to hold p constant from start
+P_INCR     : 0.2  # increment by this amount
+P_CON      : 1  # increment every 'P_CON' iters
+P_MAX      : 3  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 25  # num of iters to hold q constant from start
+Q_INCR     : 0.05  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 5  # max value of 'Q_CON'

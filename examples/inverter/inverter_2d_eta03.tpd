@@ -1,0 +1,25 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+# 'Classic' 40x20 2d domain, as per Ole Sigmund's 104 line code.
+# Matlab command: topm(40, 20, 0.3, 3.0, 1.2)
+
+PROB_TYPE  : mech
+PROB_NAME  : inverter_2d_eta03
+ETA        : 0.3
+DOF_PN     : 2
+VOL_FRAC   : 0.3
+FILT_RAD   : 1.2
+P_FAC      : 3
+ELEM_K     : Q4
+NUM_ITER   : 100
+NUM_ELEM_X : 40
+NUM_ELEM_Y : 20
+NUM_ELEM_Z : 0
+FXTR_NODE_X: 20; 21
+FXTR_NODE_Y: 1|841|21; 20; 21
+LOAD_NODE_X: 1
+LOAD_VALU_X: 1
+
+LOAD_NODE_X_OUT: 841 #  (NUM_ELEM_X + 1) * (NUM_ELEM_Y + 1) - NUM_ELEM_Y
+LOAD_VALU_X_OUT: -1

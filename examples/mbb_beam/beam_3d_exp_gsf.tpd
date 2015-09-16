@@ -1,0 +1,36 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+
+# 3d mbb beam with GSF.
+
+PROB_TYPE:   comp
+PROB_NAME:   mbb_beam_3d_exp_gsf
+ETA:         exp
+DOF_PN:      3
+VOL_FRAC:    0.25
+FILT_RAD:    1.8 # > sqrt(3)
+ELEM_K:      H8
+NUM_ELEM_X:  10
+NUM_ELEM_Y:  20
+NUM_ELEM_Z:  60
+FXTR_NODE_X: 13881
+FXTR_NODE_Y: 13881|14091|21
+FXTR_NODE_Z: 1|231
+LOAD_NODE_Y: 21|231|21
+LOAD_VALU_Y: -0.5; -1@9; -0.5
+
+NUM_ITER:    50
+
+ # Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 15  # num of iters to hold p constant from start
+P_INCR     : 0.2  # increment by this amount
+P_CON      : 1  # increment every 'P_CON' iters
+P_MAX      : 3  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 15  # num of iters to hold q constant from start
+Q_INCR     : 0.05  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 5  # max value of 'Q_CON'
