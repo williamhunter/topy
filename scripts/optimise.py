@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 
 # Author: William Hunter
 # This script handles both number of iterations and change stop criteria runs

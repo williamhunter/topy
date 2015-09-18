@@ -1,4 +1,4 @@
-"""
+﻿"""
 # =============================================================================
 # Write the stiffness matrix of finite element to file. The created file name
 # is equal to the string between the underscores of *this* file's name, plus a
@@ -8,10 +8,8 @@
 #
 # gives a file named ELEM.K in the same directory.
 #
-# Author: William Hunter <willemjagter@gmail.com>
-# Date: 14-01-2008
-# Last change: 03-04-2012 (corrected TypeError: 'Symbol' object is not iterable)
-# Copyright (C) 2008, William Hunter.
+# Author: William Hunter
+# Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
 

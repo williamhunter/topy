@@ -1,11 +1,9 @@
-"""
+﻿"""
 # =============================================================================
 # An aid to determine the node numbers of an element in an finite element mesh.
 #
-# Author: William Hunter <willemjagter@gmail.com>
-# Date: 14-01-2008
-# Last change: 08-07-2008
-# Copyright (C) 2008, William Hunter.
+# Author: William Hunter
+# Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
 

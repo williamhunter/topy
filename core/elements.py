@@ -1,13 +1,11 @@
-"""
+﻿"""
 # =============================================================================
 # Finite element stiffness matrices.
 #
 # To define your own finite elements, see Python scripts in 'data' directory.
 #
-# Author: William Hunter <willemjagter@gmail.com>
-# Date: 01-06-2007
-# Last change: 15-12-2008 (spell check)
-# Copyright (C) 2008, William Hunter.
+# Author: William Hunter
+# Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
 
