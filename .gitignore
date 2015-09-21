@@ -56,3 +56,8 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# MSVS with Python Tools
+*.pyproj
+*.user
+*.suo
