@@ -18,7 +18,7 @@ FXTR_NODE_Y: 1281
 LOAD_NODE_Y: 1
 LOAD_VALU_Y: -1
 
-NUM_ITER   : 300
+NUM_ITER   : 10
 
 P_FAC      : 3
 

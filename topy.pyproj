@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{fb50ce9b-0646-46c6-94b6-65fd7f07aeb8}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>setup.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+    <InterpreterVersion />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="build\lib\topy\core\data\H18B_K.py" />
+    <Compile Include="build\lib\topy\core\data\H8bar_K.py" />
+    <Compile Include="build\lib\topy\core\data\H8T_K.py" />
+    <Compile Include="build\lib\topy\core\data\H8_K.py" />
+    <Compile Include="build\lib\topy\core\data\matlcons.py" />
+    <Compile Include="build\lib\topy\core\data\Q4bar_K.py" />
+    <Compile Include="build\lib\topy\core\data\Q4T_K.py" />
+    <Compile Include="build\lib\topy\core\data\Q4_K.py" />
+    <Compile Include="build\lib\topy\core\data\Q5B_K.py" />
+    <Compile Include="build\lib\topy\core\data\recreate_all.py" />
+    <Compile Include="build\lib\topy\core\data\__init__.py" />
+    <Compile Include="build\lib\topy\core\elements.py" />
+    <Compile Include="build\lib\topy\core\mesher.py" />
+    <Compile Include="build\lib\topy\core\parser.py" />
+    <Compile Include="build\lib\topy\core\topology.py" />
+    <Compile Include="build\lib\topy\core\visualisation.py" />
+    <Compile Include="build\lib\topy\core\__init__.py" />
+    <Compile Include="build\lib\topy\__init__.py" />
+    <Compile Include="data\H18B_K.py" />
+    <Compile Include="data\H8bar_K.py" />
+    <Compile Include="data\H8T_K.py" />
+    <Compile Include="data\H8_K.py" />
+    <Compile Include="data\matlcons.py" />
+    <Compile Include="data\Q4bar_K.py" />
+    <Compile Include="data\Q4T_K.py" />
+    <Compile Include="data\Q4_K.py" />
+    <Compile Include="data\Q5B_K.py" />
+    <Compile Include="data\recreate_all.py" />
+    <Compile Include="data\__init__.py" />
+    <Compile Include="elements.py" />
+    <Compile Include="topygui.py" />
+    <Compile Include="parser.py" />
+    <Compile Include="scripts\nodenums.py" />
+    <Compile Include="examples\mbb_beam\optimise.py" />
+    <Compile Include="scripts\test_2D_elem.py" />
+    <Compile Include="scripts\test_3D_elem.py" />
+    <Compile Include="scripts\__init__.py" />
+    <Compile Include="setup.py" />
+    <Compile Include="topology.py" />
+    <Compile Include="visualisation.py" />
+    <Compile Include="__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="CHANGES.md" />
+    <Content Include="docs\CWindowssystem32cmd.png" />
+    <Content Include="docs\topy_logo3d.png" />
+    <Content Include="examples\arm\arm_3d_H18B_etaopt_gsf.tpd" />
+    <Content Include="examples\arm\arm_3d_H8_etaopt_gsf.tpd" />
+    <Content Include="examples\cantilever\cantilvr_3d_etaopt_gsf.tpd" />
+    <Content Include="examples\dogleg\dogleg_3d_etaopt_gsf.tpd" />
+    <Content Include="examples\heat\heat_2d_reci.tpd" />
+    <Content Include="examples\heat\heat_3d_etaopt_gsf_dquad.tpd" />
+    <Content Include="examples\heat\heat_3d_reci_flat_gsf_dquad.tpd" />
+    <Content Include="examples\inverter\inverter_2d_eta03.tpd" />
+    <Content Include="examples\inverter\inverter_3d_etaopt_gsf_dquad.tpd" />
+    <Content Include="examples\mbb_beam\beam_2d_reci.tpd" />
+    <Content Include="examples\mbb_beam\beam_2d_reci_10_iters.tpd" />
+    <Content Include="examples\mbb_beam\beam_2d_reci_gsf.tpd" />
+    <Content Include="examples\mbb_beam\beam_2d_reci_gsf_fine.tpd" />
+    <Content Include="examples\mbb_beam\beam_3d_exp_gsf.tpd" />
+    <Content Include="examples\t-piece\t-piece_2d_Q4_eta04_gsf.tpd" />
+    <Content Include="examples\torque_arm\torque_arm_3d_etaopt_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_eta01_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_eta03_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_eta04_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_eta05_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_eta06_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_eta07_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_eta09_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_etaexp_gsf.tpd" />
+    <Content Include="examples\trestle\experiment\trestle_3d_exp_gsf.tpd" />
+    <Content Include="examples\trestle\trestle_3d_etaopt_gsf.tpd" />
+    <Content Include="images\topy_logo3d.png" />
+    <Content Include="INSTALL.md" />
+    <Content Include="LICENSE.md" />
+    <Content Include="README.md" />
+    <Content Include="templates\minimal.tpd" />
+    <Content Include="templates\template.tpd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="build\" />
+    <Folder Include="build\lib\" />
+    <Folder Include="build\lib\topy" />
+    <Folder Include="build\lib\topy\core" />
+    <Folder Include="build\lib\topy\core\data" />
+    <Folder Include="data\" />
+    <Folder Include="docs" />
+    <Folder Include="examples\" />
+    <Folder Include="examples\arm" />
+    <Folder Include="examples\cantilever" />
+    <Folder Include="examples\dogleg" />
+    <Folder Include="examples\heat" />
+    <Folder Include="examples\inverter" />
+    <Folder Include="examples\mbb_beam" />
+    <Folder Include="examples\t-piece" />
+    <Folder Include="examples\torque_arm" />
+    <Folder Include="examples\trestle" />
+    <Folder Include="examples\trestle\experiment" />
+    <Folder Include="images" />
+    <Folder Include="scripts" />
+    <Folder Include="templates" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>

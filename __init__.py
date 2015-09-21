@@ -1,13 +1,13 @@
-"""
+﻿"""
 # ==============================================================================
 # ToPy -- Topology optimization with Python.
 # Copyright (C) 2012, 2015, William Hunter.
 # ==============================================================================
 """
 
-from core.topology import *
-from core.visualisation import *
-from core.elements import *
+from topology import *
+from visualisation import *
+from elements import *
 
-__version__ = "0.1.2"
-__author__  = "William Hunter <whunter.za at gmail dot com>"
+__version__ = "0.2"
+__author__  = "William Hunter <whunter.za at Gmail dot com>"
