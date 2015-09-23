@@ -1,5 +1,3 @@
-![ToPy Logo](/images/topy_logo3d.png =200x)
-
 # Introduction
 
 What is ToPy? The short version: Topology optimisation (or optimization, if you prefer) using Python.
