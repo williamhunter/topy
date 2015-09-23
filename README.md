@@ -1,14 +1,42 @@
 ![ToPy Logo](/images/topy_logo3d.png)
 
-# ToPy
-## Topology Optimization using Python
-Exported from Google Code. Please see the wiki branch for now.
+# Introduction #
 
-## Plans (not cast in stone, not necessarily in this order)
-2. Create a wiki page for the installation, currently a PDF.
-3. Show how to define a problem via Gmsh, or at least with the help of Gmsh. I'm not sure this is even going to be possible, and I need to get up to speed with Gmsh...
-4. Create a simple Tkinter (not Qt lib, it's yet another set of dependencies) GUI to define problems instead of typing it out in a text editor. The idea is that you specify the type of problem and dimension (2D or 3D) and ToPy creates a Gmsh msh file for you. You can then easily view the node and element numbers (in Gmsh) which will make defining ToPy problems much easier. You then use the same Tkinter GUI to specify restraints and regions, regenerate the msh file and reload it in Gmsh. Once you're happy, ToPy creates a tpd file and solves.
-5. Use Gmsh instead of Paraview to view results, can use Gmsh's timestep ability visualise how the domain changes (I think?).
+What is ToPy? The short version: Topology optimisation (or optimization, if you prefer) using Python.
 
-	William Hunter
+ToPy is written in Python and used to solve one of three types of topology optimisation problems. You type a simple text input file (TPD file) and define one of the following three problems:
+  1. minimum compliance,
+  1. heat conduction or
+  1. mechanism design (synthesis).
+
+ToPy solves the problem to obtain a 2D (or 3D, depending on the input file) solid-void (black and white) solution. The result is
+  1. an optimally stiff structure for minimum compliance problems,
+  1. an optimal distribution of two materials for heat conduction problems and
+  1. an optimal distribution of material for efficient mobility.
+
+The 2D results are PNG files and the 3D results are VTK files.
+
+Some examples are shown here: [ToPy Examples](https://github.com/williamhunter/ToPy/edit/wiki/ToPyExamples.md)
+
+There is a tutorial to solve a 2D compliance problem here [ToPy 2D Tutorial](https://github.com/williamhunter/ToPy/edit/wiki/ToPy2DTutorial.md).
+
+## Limitations ##
+  * ToPy only works with regular square (for 2D)  and cubic (for 3D) meshes
+  * No GUI for defining problems (but maybe in the future)
+  * No CAD interface (although you can save the 3D files as STL files via Paraview)
+  * ...
+
+## Background ##
+The development was done on Linux (32-bit), but ToPy works on Windows (32 and 64-bit¹) and OS X (Lion 10.7.4 64-bit)¹ too.
+
+ToPy was part of my Master's thesis at the University of Stellenbosch, South Africa.
+
+¹ <sub>Thanks to Nikos Kaminakis for letting me know.</sub>
+
+# Status #
+Currently, the only way to get ToPy is to wait until I upload all the code, the Google Code repo is history.
+
+# Examples #
+See ToPyExamples for two examples of the input (problem definition) files and their output after it was solved with ToPy.
+[ToPy Examples](https://github.com/williamhunter/ToPy/edit/wiki/ToPyExamples.md)
 
