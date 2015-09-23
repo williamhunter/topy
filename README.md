@@ -1,6 +1,6 @@
-![ToPy Logo](/images/topy_logo3d.png)
+![ToPy Logo](/images/topy_logo3d.png =200x)
 
-# Introduction #
+# Introduction
 
 What is ToPy? The short version: Topology optimisation (or optimization, if you prefer) using Python.
 
@@ -20,23 +20,23 @@ Some examples are shown here: [ToPy Examples](https://github.com/williamhunter/T
 
 There is a tutorial to solve a 2D compliance problem here [ToPy 2D Tutorial](https://github.com/williamhunter/ToPy/edit/wiki/ToPy2DTutorial.md).
 
-## Limitations ##
+## Limitations
   * ToPy only works with regular square (for 2D)  and cubic (for 3D) meshes
   * No GUI for defining problems (but maybe in the future)
   * No CAD interface (although you can save the 3D files as STL files via Paraview)
   * ...
 
-## Background ##
+## Background
 The development was done on Linux (32-bit), but ToPy works on Windows (32 and 64-bit¹) and OS X (Lion 10.7.4 64-bit)¹ too.
 
 ToPy was part of my Master's thesis at the University of Stellenbosch, South Africa.
 
 ¹ <sub>Thanks to Nikos Kaminakis for letting me know.</sub>
 
-# Status #
+# Status
 Currently, the only way to get ToPy is to wait until I upload all the code, the Google Code repo is history.
 
-# Examples #
+# Examples
 See ToPyExamples for two examples of the input (problem definition) files and their output after it was solved with ToPy.
 [ToPy Examples](https://github.com/williamhunter/ToPy/edit/wiki/ToPyExamples.md)
 
