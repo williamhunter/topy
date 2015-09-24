@@ -1,8 +1,7 @@
 [ToPy Problem Definition File v2007]
 
 # =============================================================================
-# Author: William Hunter <willemjagter@gmail.com>
-# Copyright (C) 2008, William Hunter.
+# Author: William Hunter
 #
 # Template file explaining the ToPy Problem Definition file format.
 #
@@ -102,7 +101,7 @@ ELEM_K: Q4 #  Other 2D: Q5B, Q4a5B, Q4T.   3D: H8, H18B, H8T.
 # Numbering of nodes and elements is from top to bottom, columnwise, starting
 # at one (1).
 # For 3D, the X-Y plane is numbered first, then in the Z-direction.
-NUM_ELEM_X: 60 #  Number of elements in the X-direction.
+NUM_ELEM_X: 60 #  Number (quantity) of elements in the X-direction.
 NUM_ELEM_Y: 20 #  Number of elements in the (negative) Y-direction.
 # Set the following keyword to 0 if not necessary for your problem, i.e., 2D:
 NUM_ELEM_Z: 10
@@ -123,15 +122,15 @@ FXTR_NODE_Z: 1; 4|13|3; 18|22|2 #  Nodes 1, 4, 7, 10, 13, 18, 20, 22.
 # Node number(s) and/or 'start|stop|step' notation may be used for multiple
 # nodes, ";" may be used to separate ranges. NOTE: Do not end a line with a ";"
 # A load value (VALU) *must* be specified for the nodes you choose. Use + or -
-# to set the direction of the load (+ is 'up', - is 'down).
+# to set the direction of the load.
 # Set the *node number(s)* that's loaded, *not* the degrees of freedom, that's
 # taken care of by ToPy. Assign values for the corresponding load size(s).
 # Also note the use of the "@" below, which is rather convenient for the user.
-LOAD_NODE_X: 1; 4; 9 #  Load nodes 1, 4 and 9.
-LOAD_NODE_Y: 1       #  Upper left corner -- node number = 1 (always).
-LOAD_NODE_Z: 20|32|3 #  Load node 20 to 32 in steps of 3.
+LOAD_NODE_X: 1; 4; 9 #  Load nodes 1, 4 and 9 in X direction.
+LOAD_NODE_Y: 1       #  Upper left corner -- node number = 1 (always), Y direction.
+LOAD_NODE_Z: 20|32|3 #  Load node 20 to 32 in steps of 3, in Z direction.
 LOAD_VALU_X: 0.75    #  Simply omit a line if not necessary for your problem.
-LOAD_VALU_Y: -1      #  Value of the load = 1, direction negative Y (down).
+LOAD_VALU_Y: -1      #  Value of the load = 1, direction negative Y.
 LOAD_VALU_Z: 1@10    #  Value of the load = 1 at 10 nodes in Z direction.
 
 
@@ -139,8 +138,8 @@ LOAD_VALU_Z: 1@10    #  Value of the load = 1 at 10 nodes in Z direction.
 # === Passive (void) and active (solid) elements ===
 # ==================================================
 # List the *element* numbers you want to affect.
-PASV_ELEM: 10|19; 30|39; 50|59; 70|79; 90|99
-ACTV_ELEM: 1|1181|20; 1181|1200
+PASV_ELEM: 10|19; 30|39; 50|59; 70|79; 90|99 # No elements will appear here.
+ACTV_ELEM: 1|1181|20; 1181|1200	             # These elements won't be 'deleted'.
 
 
 # =============================================
