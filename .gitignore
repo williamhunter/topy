@@ -65,3 +65,4 @@ target/
 # Other
 old/
 gmsh/
+*.K
