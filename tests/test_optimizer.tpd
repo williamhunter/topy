@@ -1,0 +1,41 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+
+PROB_TYPE:   comp
+PROB_NAME:   torque_arm_3d_etaopt_gsf
+ETA:         0.5
+DOF_PN:      3
+VOL_FRAC:    0.15
+FILT_RAD:    1.5
+ELEM_K:      H8
+NUM_ELEM_X:  20
+NUM_ELEM_Y:  20
+NUM_ELEM_Z:  40
+FXTR_NODE_X: 1|441#;111;121
+FXTR_NODE_Y: 1|441#1;11;111;121
+FXTR_NODE_Z: 1|441#;111;121
+#LOAD_NODE_Z: 9346; 9366#; 9460; 9250
+#LOAD_NODE_Z: 9461; 9251
+#LOAD_VALU_Z: -1; 1#; -1; 1
+#LOAD_NODE_Y: 9346; 9366
+#LOAD_VALU_Y: 1 ; 1
+LOAD_NODE_X: 17861
+LOAD_VALU_X: 1
+
+
+NUM_ITER   : 100
+#CHG_STOP   : 0.001
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 15  # num of iters to hold p constant from start
+P_INCR     : 0.2  # increment by this amount
+P_CON      : 1  # increment every 'P_CON' iters
+P_MAX      : 3  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 15  # num of iters to hold q constant from start
+Q_INCR     : 0.05  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 5  # max value of 'Q_CON'
