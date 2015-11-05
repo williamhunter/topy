@@ -78,12 +78,13 @@ class Optimizer:
         
         self.load_cases = [load_case]
         self.active_load_case = load_case
+        self.case_weights = {load_case: 1}
         
         
         self.dof = dof_pn
         self.fixed_dof = []
-        self.loaded_dof = {'default': []}
-        self.loads = {'default': []}   
+        self.loaded_dof = {load_case: []}
+        self.loads = {load_case: []}   
         
         self.max_iterations = max_iterations
         
@@ -119,8 +120,9 @@ class Optimizer:
         case epul is used to set the number of elements per unit length. The
         latter makes it easy to change the number of elements
         
-        Note: Currently the code does not check the inputs, make sure the sizes
-        are all an integer multiple of 1/epul.
+        Note: Currently epul is not used for anything, the idea is to later use
+        it so fixing and loading of nodes can be applied to physical dimensions
+        so the resolution can easily be changed by chaning epul
         
         Parameters
         ----------
@@ -133,25 +135,32 @@ class Optimizer:
         epul: float
             Elements per unit length
         """
-        num_elements = np.array([x_size, y_size, z_size])*epul
-        self.elements = num_elements[0]*num_elements[1]*num_elements[2]
-        num_nodes = num_elements + 1
+        self.num_elements = np.array([x_size, y_size, z_size])*epul
+        self.total_elements = self.num_elements[0]*self.num_elements[1]*self.num_elements[2]
+        self.num_nodes = self.num_elements + 1
         
-        self.topy_dict['NUM_ELEM_X'] = num_elements[0]
-        self.topy_dict['NUM_ELEM_Y'] = num_elements[1]    
-        self.topy_dict['NUM_ELEM_Z'] = num_elements[2]   
+        self.topy_dict['NUM_ELEM_X'] = self.num_elements[0]
+        self.topy_dict['NUM_ELEM_Y'] = self.num_elements[1]    
+        self.topy_dict['NUM_ELEM_Z'] = self.num_elements[2]   
         
-        self.topy_dict['E2SDOFMAPI'] = _e2sdofmapinit(num_elements[0],
-                                                      num_elements[1],
+        self.topy_dict['E2SDOFMAPI'] = _e2sdofmapinit(self.num_elements[0],
+                                                      self.num_elements[1],
                                                       self.dof)
         
-        self.nodes = np.arange(num_nodes[0]*num_nodes[1]*num_nodes[2])
-        Ksize = len(self.nodes)*self.dof
-        print "Ksize", Ksize
+        nodes = np.arange(self.num_nodes[0]*self.num_nodes[1]*\
+                self.num_nodes[2])
+        Ksize = len(nodes)*self.dof                
+        
         self.topy_dict['K'] = spmatrix.ll_mat_sym(Ksize, Ksize) #  Global stiffness matrix   
+        
+        # Create array with node numbers
+        self.nodes = nodes.reshape(self.num_nodes, order = 'F')
+        
+        # Create array with element numbers
+        elements = np.arange(self.total_elements)
+        self.elements =  elements.reshape(self.num_elements, order = 'F')
     
-    
-    def add_load_case(self, name):
+    def add_load_case(self, name, weight = 1):
         """
         Adds an additional load case to the problem and activates it
         
@@ -164,6 +173,7 @@ class Optimizer:
         self.loaded_dof[name] = []
         self.loads[name] = []
         self.load_cases.append(name)
+        self.case_weights[name] = weight
         
         self.active_load_case = name
         
@@ -220,7 +230,6 @@ class Optimizer:
             self.loaded_dof[load_case].append(node*self.dof+\
                                             self.directions[direction])
             self.loads[load_case].append(load)
-            
         
     def run_optimization(self):
         
@@ -248,7 +257,7 @@ class Optimizer:
             
             # Update design variables:
             for i in xrange(1,len(topy_cases)):
-                topy_cases[0].df += topy_cases[i].df           
+                topy_cases[0].df += topy_cases[i].df*self.case_weights[self.load_cases[i]]       
             topy_cases[0].filter_sens_sigmund()
             topy_cases[0].update_desvars_oc()
             for i in xrange(1,len(topy_cases)):
@@ -257,7 +266,7 @@ class Optimizer:
             create_3d_geom(t1.desvars, prefix=t1.probname, \
             iternum=t1.itercount, time='none')
             print '%4i  | %3.6e | %3.3f | %3.4e | %3.3f | %3.3f |  %1.3f  |  %3.3f '\
-            % (t1.itercount, t1.objfval, t1.desvars.sum()/(self.elements), \
+            % (t1.itercount, t1.objfval, t1.desvars.sum()/(self.total_elements), \
             t1.change, t1.p, t1.q, t1.eta.mean(), t1.svtfrac)
             # Build a list of average etas:
             etas_avg.append(t1.eta.mean())
@@ -299,6 +308,6 @@ if __name__ == '__main__':
     opt.set_problem_dimensions(20, 20, 40)
     opt.fix_nodes(np.arange(441), directions=['x', 'y', 'z'])
     opt.load_nodes([17860], 1, direction = 'x')
-    opt.add_load_case('second')
-    opt.load_nodes([17860], 3, direction = 'y')
+    opt.add_load_case('second', weight = 20)
+    opt.load_nodes([17860], 1, direction = 'y')
     opt.run_optimization()
