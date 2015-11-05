@@ -2,6 +2,7 @@ import numpy as np
 import elements
 #from parser import _e2sdofmapinit
 from topy.parser import _e2sdofmapinit
+import copy
 
 
 from pysparse import spmatrix
@@ -42,7 +43,8 @@ class Optimizer:
     def __init__(self, name, vol_frac, problem_type = ProblemTypes.comp,
                  filter_radius = 1.5, dof_pn = 3, max_iterations = 100,
                  penalty_factor = 1, eta = 0.5,
-                 elem_k = ElementStiffnessMatrices3D.H8, void_density = 0.01):
+                 elem_k = ElementStiffnessMatrices3D.H8, void_density = 0.01,
+                 load_case = 'default'):
         """ Initializes Topology Optimizer
         
         Parameters
@@ -67,15 +69,21 @@ class Optimizer:
             Eta
         elem_k:
             Element stiffness matrix, choose from Optimizer.k_2d or k_3d
-        void_density: float
+        void_density : float
             Minimum density where element is disabled
+        load_case : str
+            Name for initial load case, defaults to 'default'
         
         """
         
+        self.load_cases = [load_case]
+        self.active_load_case = load_case
+        
+        
         self.dof = dof_pn
         self.fixed_dof = []
-        self.loaded_dof = []
-        self.loads = []   
+        self.loaded_dof = {'default': []}
+        self.loads = {'default': []}   
         
         self.max_iterations = max_iterations
         
@@ -89,11 +97,9 @@ class Optimizer:
                           'ETA': eta,
                           'ELEM_TYPE': elem_k,
                           'ELEM_K': getattr(elements, elem_k),
-                          'FIX_DOF': self.fixed_dof,
-                          'LOAD_DOF': self.loaded_dof,
-                          'LOAD_VAL': self.loads,
                           'PASV_ELEM': np.array([]),
                           'ACTV_ELEM': np.array([]),
+                          'FIX_DOF': self.fixed_dof,
                           'P_HOLD'     : 15,  # num of iters to hold p constant from start
                           'P_INCR'     : 0.2,  # increment by this amount
                           'P_CON'      : 1,  # increment every 'P_CON' iters
@@ -145,6 +151,28 @@ class Optimizer:
         self.topy_dict['K'] = spmatrix.ll_mat_sym(Ksize, Ksize) #  Global stiffness matrix   
     
     
+    def add_load_case(self, name):
+        """
+        Adds an additional load case to the problem and activates it
+        
+        Parameters
+        ----------
+        
+        name : str
+            The name used to identify the load case
+        """
+        self.loaded_dof[name] = []
+        self.loads[name] = []
+        self.load_cases.append(name)
+        
+        self.active_load_case = name
+        
+    def activate_load_case(self, name):
+        """
+        Activates specified load case for setting up loads
+        """
+        self.activate_load_case = name
+        
         
         
     def fix_nodes(self, nodes, directions):
@@ -160,22 +188,12 @@ class Optimizer:
         
         """
         nodes = list(nodes)
-        
-#        if type(directions) != list:
-#            assert type(directions) == str
-#            directions = [directions]
-#        for direction in directions:
-#            key = self.fxtr_names[direction]
-#            if key in self.topy_dict:
-#                self.topy_dict[key].extend(nodes)
-#            else:
-#                self.topy_dict[key] = nodes
     
         for direction in directions:
             for node in nodes:
                 self.fixed_dof.append(node*self.dof+self.directions[direction]) 
             
-    def load_nodes(self, nodes, loads, direction):
+    def load_nodes(self, nodes, loads, direction, load_case = None):
         """ Loads nodes in the specified direction
         
         Parameters
@@ -190,47 +208,51 @@ class Optimizer:
             Which direction to fix, 'x', 'y' or 'z'
         
         """
+        
+        load_case = self.active_load_case if load_case is None else load_case
 
-#        keys = self.load_names[direction]
         nodes = list(nodes)
         if type(loads) == float or type(loads) == int:
             loads = [float(loads)/len(nodes)]*len(nodes)
         assert len(nodes) == len(loads)
-#        if keys[0] in self.topy_dict:
-#            self.topy_dict[keys[0]].extend(nodes)
-#            self.topy_dict[keys[1]].extend(loads)
-#        else:
-#            self.topy_dict[keys[0]] = nodes
-#            self.topy_dict[keys[1]] = loads
-        
+
         for node, load in zip(nodes, loads):
-            self.loaded_dof.append(node*self.dof+self.directions[direction])
-            self.loads.append(load)
+            self.loaded_dof[load_case].append(node*self.dof+\
+                                            self.directions[direction])
+            self.loads[load_case].append(load)
             
         
     def run_optimization(self):
         
-        # Set up ToPy:
-        t1 = topology.Topology()
-        t1.topydict = self.topy_dict
-        t1.set_top_params()
+        # Set up ToPy for the different load cases:
+        
+        topy_cases = []
+        for load_case in self.load_cases:
+            topy_cases.append(topology.Topology())
+            topy_dict = self.topy_dict.copy()
+            topy_dict['LOAD_DOF'] = self.loaded_dof[load_case]
+            topy_dict['LOAD_VAL'] = self.loads[load_case]           
+            topy_cases[-1].topydict = topy_dict
+            topy_cases[-1].set_top_params()
 
         etas_avg = []
+        t1 = topy_cases[0]
 
         # Optimising function:
         def optimise():
-            t1.fea()
-            t1.sens_analysis()
             
-            #t2.fea()
-            #t2.sens_analysis()
-            #t1.df += t2.df
+            # Perform analysis for the different load cases:
+            for topy_case in topy_cases:            
+                topy_case.fea()
+                topy_case.sens_analysis()
             
-            t1.filter_sens_sigmund()
-            #t2.df = t1.df
-            t1.update_desvars_oc()
-            
-            #t2.desvars = t1.desvars
+            # Update design variables:
+            for i in xrange(1,len(topy_cases)):
+                topy_cases[0].df += topy_cases[i].df           
+            topy_cases[0].filter_sens_sigmund()
+            topy_cases[0].update_desvars_oc()
+            for i in xrange(1,len(topy_cases)):
+                topy_cases[i].desvars = topy_cases[0].desvars
             # Below this line we print and create images:
             create_3d_geom(t1.desvars, prefix=t1.probname, \
             iternum=t1.itercount, time='none')
@@ -268,18 +290,15 @@ class Optimizer:
     prob_types = ProblemTypes
     k_2d = ElementStiffnessMatrices2D
     k_3d = ElementStiffnessMatrices3D
-    directions = {'x': 0, 'y': 1, 'z': 2}
-    #fxtr_names = {'x': 'FXTR_NODE_X', 'y': 'FXTR_NODE_Y', 'z': 'FXTR_NODE_Z' }
-    #load_names = {'x': ['LOAD_NODE_X', 'LOAD_VALU_X'],
-    #              'y': ['LOAD_NODE_Y', 'LOAD_VALU_Y'],
-    #              'z': ['LOAD_NODE_Z', 'LOAD_VALU_Z']}
-    
+    directions = {'x': 0, 'y': 1, 'z': 2}   
     
     
     
 if __name__ == '__main__':
-    opt = Optimizer('test', 0.15, Optimizer.prob_types.comp)
+    opt = Optimizer('multi_load_2', 0.15, Optimizer.prob_types.comp)
     opt.set_problem_dimensions(20, 20, 40)
     opt.fix_nodes(np.arange(441), directions=['x', 'y', 'z'])
     opt.load_nodes([17860], 1, direction = 'x')
+    opt.add_load_case('second')
+    opt.load_nodes([17860], 3, direction = 'y')
     opt.run_optimization()

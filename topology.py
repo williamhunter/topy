@@ -52,6 +52,7 @@ class Topology:
     values. Data is read from an input file (see 'examples' folder).
 
     """
+    solid, void = 1.000, 0.001 #  Upper and lower bound value for design variables
     def __init__(self):
         self.topydict = {} #  Store tpd file data in dictionary
         self.pcount = 0 #  Counter for continuation of p
@@ -59,8 +60,6 @@ class Topology:
         self.itercount = 0 #  Internal counter
         self.change = 1
         self.svtfrac = None
-        
-        self.solid, self.void = 1.000, 0.001 #  Upper and lower bound value for design variables
 
     # ======================
     # === Public methods ===

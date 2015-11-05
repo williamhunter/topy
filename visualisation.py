@@ -17,11 +17,13 @@ from numpy import arange, asarray
 
 from pyvtk import CellData, LookupTable, Scalars, UnstructuredGrid, VtkData
 
+from topy.topology import Topology
+
 __all__ = ['create_2d_imag', 'create_3d_geom']
 
 #  Lower bound value used for pixel/voxel culling, any value below this won't
 # be plotted. Should be same as VOID's value in 'topolgy.py'.
-THRESHOLD = 0.001
+THRESHOLD = Topology.void
 
 # TO DO: Add this function in order to plot constraints and loads, 2D only:
 # pyplot.quiver([fromx],[fromy],[tox],[toy], color='b', edgecolors='k',
