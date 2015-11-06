@@ -181,7 +181,7 @@ def _write_legacy_vtu(x, fname):
             for k in xrange(columns):
                 if x[i,j,k] > THRESHOLD:
                     xculled.append(x[i,j,k])
-                    points += (voxel_local_points + [i,j,k]).tolist()
+                    points += (voxel_local_points + [k,j,i]).tolist()
 
     voxels = arange(len(points)).reshape(len(xculled), 8).tolist()
     topology = UnstructuredGrid(points, voxel = voxels)
