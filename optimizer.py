@@ -309,6 +309,7 @@ class Optimizer:
             topy_cases[0].update_desvars_oc()
             for i in xrange(1,len(topy_cases)):
                 topy_cases[i].desvars = topy_cases[0].desvars
+                topy_cases[i].p = topy_cases[0].p
             # Below this line we print and create images:
             create_3d_geom(t1.desvars, prefix=t1.probname, \
             iternum=t1.itercount, time='none')
