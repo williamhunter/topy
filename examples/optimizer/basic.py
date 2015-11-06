@@ -10,11 +10,11 @@ the number of elements can easily be changed for increased resolution
 from topy.optimizer import Optimizer
 
 # Initialize problem
-opt = Optimizer('basic', 0.10)
+opt = Optimizer('basic2', 0.15)
 opt.set_problem_dimensions(10, 10, 20)
 
 # Define fixed nodes (entire z = 0 plane)
-left_face = opt.nodes[:,:,0].flatten()
+left_face = opt.nodes[:,:,0]
 opt.fix_nodes(left_face, directions = ['x', 'y', 'z']) # Fixed in all directions
 
 # Apply a load in -y direction at a single node in the center of the z = 20 plane

@@ -12,7 +12,7 @@ opt = Optimizer('multi_load', 0.10, load_case = 'vertical')
 opt.set_problem_dimensions(10, 10, 20)
 
 # Define fixed nodes (entire z = 0 plane)
-left_face = opt.nodes[:,:,0].flatten()
+left_face = opt.nodes[:,:,0]
 opt.fix_nodes(left_face, directions = ['x', 'y', 'z']) # Fixed in all directions
 
 # Apply a load in -y direction at a single node in the center of the z = 20 plane

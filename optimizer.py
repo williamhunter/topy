@@ -85,6 +85,8 @@ class Optimizer:
         self.fixed_dof = []
         self.loaded_dof = {load_case: []}
         self.loads = {load_case: []}   
+        self.passive = []
+        self.active = []
         
         self.max_iterations = max_iterations
         
@@ -98,8 +100,8 @@ class Optimizer:
                           'ETA': eta,
                           'ELEM_TYPE': elem_k,
                           'ELEM_K': getattr(elements, elem_k),
-                          'PASV_ELEM': np.array([]),
-                          'ACTV_ELEM': np.array([]),
+                          'PASV_ELEM': self.passive,
+                          'ACTV_ELEM': self.active,
                           'FIX_DOF': self.fixed_dof,
                           'P_HOLD'     : 15,  # num of iters to hold p constant from start
                           'P_INCR'     : 0.2,  # increment by this amount
@@ -153,12 +155,15 @@ class Optimizer:
         
         self.topy_dict['K'] = spmatrix.ll_mat_sym(Ksize, Ksize) #  Global stiffness matrix   
         
-        # Create array with node numbers
-        self.nodes = nodes.reshape(self.num_nodes, order = 'F')
+        # Create node grids:
+        self.nx, self.ny, self.nz = np.indices(self.num_nodes)
+        self.nodes = self.ny+self.nx*self.num_nodes[1]+\
+                        self.nz*self.num_nodes[1]*self.num_nodes[0]
         
         # Create array with element numbers
         elements = np.arange(self.total_elements)
         self.elements =  elements.reshape(self.num_elements, order = 'F')
+        self.element_indices = np.indices(self.num_elements)
     
     def add_load_case(self, name, weight = 1):
         """
@@ -173,7 +178,7 @@ class Optimizer:
         self.loaded_dof[name] = []
         self.loads[name] = []
         self.load_cases.append(name)
-        self.case_weights[name] = weight
+        self.case_weights[name] = float(weight)
         
         self.active_load_case = name
         
@@ -191,17 +196,24 @@ class Optimizer:
         Parameters
         ----------
         
-        nodes : list
-            List of node numbers (as in self.nodes) to fix
+        nodes : list of int
+            List of node numbers as in self.nodes
         directions : str or list of str
             Which direction to fix, 'x', 'y' or 'z'
         
         """
-        nodes = list(nodes)
-    
+        
+        # Check if numpy array, if that is the case flatten the array
+        if type(nodes) == np.ndarray:
+            nodes = list(nodes.flatten())        
+        
         for direction in directions:
             for node in nodes:
                 self.fixed_dof.append(node*self.dof+self.directions[direction]) 
+                
+    def _fix_node_number(self, node_number, directions):
+        for direction in directions:
+            self.fixed_dof.append(node_number*self.dof+self.directions[direction]) 
             
     def load_nodes(self, nodes, loads, direction, load_case = None):
         """ Loads nodes in the specified direction
@@ -209,9 +221,9 @@ class Optimizer:
         Parameters
         ----------
         
-        nodes : list
-            List of node numbers (as in self.nodes) to fix
-        loads : list or float
+        nodes : list of int
+            List of node numbers as in self.nodes
+        loads : list of float or float
             Load, can either be a list of loads for individual loads or a float,
             in which case all nodes are applied a load of load/len(nodes)
         direction : str
@@ -221,7 +233,10 @@ class Optimizer:
         
         load_case = self.active_load_case if load_case is None else load_case
 
-        nodes = list(nodes)
+        # Check if numpy array, if that is the case flatten the array
+        if type(nodes) == np.ndarray:
+            nodes = list(nodes.flatten())
+
         if type(loads) == float or type(loads) == int:
             loads = [float(loads)/len(nodes)]*len(nodes)
         assert len(nodes) == len(loads)
@@ -230,8 +245,40 @@ class Optimizer:
             self.loaded_dof[load_case].append(node*self.dof+\
                                             self.directions[direction])
             self.loads[load_case].append(load)
+            
+    def _load_node_number(self, node_number, load, direction, load_case = None):
+        load_case = self.active_load_case if load_case is None else load_case
+        self.loaded_dof[load_case].append(node_number*self.dof+\
+                                            self.directions[direction])
+        self.loads[load_case].append(load)
+            
+            
+    def add_passive_elements(self, elements):
+        """ Adds specified elements to list of passive elements (no material)
+        """
+        self.passive.extend(elements)
+        
+    def _get_node_number(self, index):
+        """ Converts a node index to node number:
+        
+        Parameters
+        ----------
+        index : list of int
+            Node index on the form [x, y, z]
+        """
+        # Check if node number is within grid:
+        if np.any(index > self.num_nodes-1):
+            raise IndexError('Node index outside problem node grid of size\
+                                {:s}'.format(self.num_nodes))
+        node_number = index[1]+index[0]*self.num_nodes[1]+\
+                        index[2]*self.num_nodes[1]*self.num_nodes[0]
+        return node_number
         
     def run_optimization(self):
+        
+        # Prepare variables:
+        self.topy_dict['PASV_ELEM'] = np.array(self.passive)
+        self.topy_dict['ACTV_ELEM'] = np.array(self.active)
         
         # Set up ToPy for the different load cases:
         
@@ -278,7 +325,8 @@ class Optimizer:
         ti = time()
 
         n = 0
-        while t1.change > t1.void and n < self.max_iterations:
+        while n < self.max_iterations:
+            n += 1
             optimise()
     
         te = time()
