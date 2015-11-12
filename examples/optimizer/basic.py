@@ -10,7 +10,7 @@ the number of elements can easily be changed for increased resolution
 from topy.optimizer import Optimizer
 
 # Initialize problem
-opt = Optimizer('basic2', 0.15)
+opt = Optimizer('basic', 0.15)
 opt.set_problem_dimensions(10, 10, 20)
 
 # Define fixed nodes (entire z = 0 plane)
