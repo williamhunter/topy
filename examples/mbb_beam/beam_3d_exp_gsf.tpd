@@ -22,7 +22,7 @@ LOAD_VALU_Y: -0.5; -1@9; -0.5
 
 NUM_ITER:    50
 
- # Grey-scale filter (GSF)
+# Grey-scale filter (GSF)
 P_FAC      : 1
 P_HOLD     : 15  # num of iters to hold p constant from start
 P_INCR     : 0.2  # increment by this amount
