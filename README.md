@@ -7,5 +7,6 @@ no fancy GUI; you have to define a problem in a text file (a TPD file, short for
 that descibe the parameters. Not too cumbersome once you get the hang of it.
 
 ToPy was originally hosted on Google Code, please refer to the [ToPy wiki](https://github.com/williamhunter/topy/wiki)
+
 ---
 William Hunter
