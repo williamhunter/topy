@@ -18,14 +18,13 @@ abs, take, log, allclose, clip, log2, equal
 
 from pysparse import superlu, itsolvers, precon
 
-from parser import tpd_file2dict
+from topy.parser import tpd_file2dict
 
 __all__ = ['Topology']
 
 
 MAX_ITERS = 250
 
-SOLID, VOID = 1.000, 0.001 #  Upper and lower bound value for design variables
 KDATUM = 0.1 #  Reference stiffness value of springs for mechanism synthesis
 
 # Constants for exponential approximation:
@@ -53,6 +52,7 @@ class Topology:
     values. Data is read from an input file (see 'examples' folder).
 
     """
+    solid, void = 1.000, 0.001 #  Upper and lower bound value for design variables
     def __init__(self):
         self.topydict = {} #  Store tpd file data in dictionary
         self.pcount = 0 #  Counter for continuation of p
@@ -368,9 +368,9 @@ synthesis!')
                         tmp[ely, elx] = - self.p * self.desvars[ely, elx] **\
                         (self.p - 1) * qeTKeqe
                     elif self.probtype == 'heat':
-                        self.objfval += (VOID + (1 - VOID) * \
+                        self.objfval += (self.void + (1 - self.void) * \
                         self.desvars[ely, elx] ** self.p) * qeTKeqe
-                        tmp[ely, elx] = - (1 - VOID) * self.p * \
+                        tmp[ely, elx] = - (1 - self.void) * self.p * \
                         self.desvars[ely, elx] ** (self.p - 1) * qeTKeqe
                     elif self.probtype == 'mech':
                         self.objfval = self.d[self.loaddofout]
@@ -392,9 +392,9 @@ synthesis!')
                             tmp[elz, ely, elx] = - self.p * self.desvars[elz, \
                             ely, elx] ** (self.p - 1) * qeTKeqe
                         elif self.probtype == 'heat':
-                            self.objfval += (VOID + (1 - VOID) * \
+                            self.objfval += (self.void + (1 - self.void) * \
                             self.desvars[elz, ely, elx] ** self.p) * qeTKeqe
-                            tmp[elz, ely, elx] = - (1 - VOID) *  self.p * \
+                            tmp[elz, ely, elx] = - (1 - self.void) *  self.p * \
                             self.desvars[elz, ely, elx] ** (self.p - 1) * \
                             qeTKeqe
                         elif self.probtype == 'mech':
@@ -517,28 +517,28 @@ synthesis!')
             if self.probtype == 'mech':
                 if self.approx == 'dquad':
                     curv = - 1 / (self.eta * self.desvars) * self.df
-                    beta = maximum(self.desvars-(self.df + lammid)/curv, VOID)
+                    beta = maximum(self.desvars-(self.df + lammid)/curv, self.void)
                     move_upper = minimum(move, self.desvars / 3)
-                    desvars = maximum(VOID, maximum((self.desvars - move),\
-                    minimum(SOLID,  minimum((self.desvars + move), \
+                    desvars = maximum(self.void, maximum((self.desvars - move),\
+                    minimum(self.solid,  minimum((self.desvars + move), \
                     (self.desvars * maximum(1e-10, \
                     (-self.df / lammid))**self.eta)**self.q))))
                 else:  # reciprocal or exponential
-                    desvars = maximum(VOID, maximum((self.desvars - move),\
-                    minimum(SOLID,  minimum((self.desvars + move), \
+                    desvars = maximum(self.void, maximum((self.desvars - move),\
+                    minimum(self.solid,  minimum((self.desvars + move), \
                     (self.desvars * maximum(1e-10, \
                     (-self.df / lammid))**self.eta)**self.q))))
             else:  # compliance or heat
                 if self.approx == 'dquad':
                     curv = - 1 / (self.eta * self.desvars) * self.df
-                    beta = maximum(self.desvars-(self.df + lammid)/curv, VOID)
+                    beta = maximum(self.desvars-(self.df + lammid)/curv, self.void)
                     move_upper = minimum(move, self.desvars / 3)
-                    desvars = maximum(VOID, maximum((self.desvars - move),\
-                    minimum(SOLID,  minimum((self.desvars + move_upper), \
+                    desvars = maximum(self.void, maximum((self.desvars - move),\
+                    minimum(self.solid,  minimum((self.desvars + move_upper), \
                     beta**self.q))))
                 else:  # reciprocal or exponential
-                    desvars = maximum(VOID, maximum((self.desvars - move),\
-                    minimum(SOLID,  minimum((self.desvars + move), \
+                    desvars = maximum(self.void, maximum((self.desvars - move),\
+                    minimum(self.solid,  minimum((self.desvars + move), \
                     (self.desvars * (-self.df / lammid)**self.eta)**self.q))))
 
             # Check for passive and active elements, modify updated x:
@@ -558,10 +558,10 @@ synthesis!')
                                 idx.append(k*x + j + i*x*y)
                 if self.pasv.any():
                     pasv = take(idx, self.pasv) #  new indices
-                    put(flatx, pasv, VOID) #  = zero density
+                    put(flatx, pasv, self.void) #  = zero density
                 if self.actv.any():
                     actv = take(idx, self.actv) #  new indices
-                    put(flatx, actv, SOLID) #  = solid
+                    put(flatx, actv, self.solid) #  = self.solid
                 desvars = flatx.reshape(dims)
 
             if self.nelz == 0:
@@ -582,9 +582,9 @@ synthesis!')
         # Change in design variables:
         self.change = (abs(self.desvars - self.desvarsold)).max()
 
-        # Solid-void fraction:
-        nr_s = self.desvars.flatten().tolist().count(SOLID)
-        nr_v = self.desvars.flatten().tolist().count(VOID)
+        # Solid-self.void fraction:
+        nr_s = self.desvars.flatten().tolist().count(self.solid)
+        nr_v = self.desvars.flatten().tolist().count(self.void)
         self.svtfrac = (nr_s + nr_v) / self.desvars.size
 
 
@@ -606,7 +606,7 @@ synthesis!')
                     if self.probtype == 'comp' or self.probtype == 'mech':
                         updatedKe = self.desvars[ely, elx] ** self.p * self.Ke
                     elif self.probtype == 'heat':
-                        updatedKe = (VOID + (1 - VOID) * \
+                        updatedKe = (self.void + (1 - self.void) * \
                         self.desvars[ely, elx] ** self.p) * self.Ke
                     mask = ones(e2sdofmap.size, dtype=int)
                     K.update_add_mask_sym(updatedKe, e2sdofmap, mask)
@@ -621,7 +621,7 @@ synthesis!')
                             updatedKe = self.desvars[elz, ely, elx] ** \
                             self.p * self.Ke
                         elif self.probtype == 'heat':
-                            updatedKe = (VOID + (1 - VOID) * \
+                            updatedKe = (self.void + (1 - self.void) * \
                             self.desvars[elz, ely, elx] ** self.p) * self.Ke
                         mask = ones(e2sdofmap.size, dtype=int)
                         K.update_add_mask_sym(updatedKe, e2sdofmap, mask)
