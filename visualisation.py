@@ -3,7 +3,7 @@
 # Functions in order to visualise 2D and 3D NumPy arrays.
 #
 # Author: William Hunter
-# Copyright (C) 2008, 2015, William Hunter.
+# Copyright (C) 2008, 2015, 2016, William Hunter.
 # =============================================================================
 """
 
@@ -22,12 +22,6 @@ __all__ = ['create_2d_imag', 'create_3d_geom']
 #  Lower bound value used for pixel/voxel culling, any value below this won't
 # be plotted. Should be same as VOID's value in 'topolgy.py'.
 THRESHOLD = 0.001
-
-# TO DO: Add this function in order to plot constraints and loads, 2D only:
-# pyplot.quiver([fromx],[fromy],[tox],[toy], color='b', edgecolors='k',
-# linewidths=(1,))
-#
-# 3D is another story...
 
 def create_2d_imag(x, **kwargs):
     """
@@ -64,7 +58,7 @@ def create_2d_imag(x, **kwargs):
     # === Start of Matplotlib commands ===
     # ====================================
     # x = flipud(x) #  Check your matplotlibrc file; might plot upside-down...
-    figure()
+    figure() # open a figure
     if kwargs.has_key('title'):
         title(kwargs['title'])
         imshow(-x, cmap=cm.gray, aspect='equal', interpolation='nearest')
@@ -82,6 +76,32 @@ def create_2d_imag(x, **kwargs):
     fname = _change_fname(fname_dict, kwargs)
     # Save the domain as image:
     savefig(fname)
+    close() # close the figure
+
+def create_2d_mesh(nx, ny, **kwargs):
+    """
+    Create a 2d mesh file by specifying the number of elements in the
+    x and y direction. View the resultant file with Gmsh.
+
+    ???
+
+    INPUTS:
+        nx -- number of elements in the x direction
+        yx --
+        fname --
+
+    OUTPUTS:
+        <filename>.msh
+
+    ADDITIONAL INPUTS (keyword arguments):
+        fname -- ???
+
+    EXAMPLES:
+        >>> create_2d_mesh(nx, ny, fname)
+
+    """
+    print 'create_2d_mesh(nx, ny, **kwargs) - not coded yet!'
+    
 
 def create_3d_geom(x, **kwargs):
     """
