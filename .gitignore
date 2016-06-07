@@ -62,7 +62,8 @@ target/
 *.user
 *.suo
 
-# Other
+# Other (added by williamhunter)
 old/
-gmsh/
+notes/
 *.K
+examples/*/*.png
