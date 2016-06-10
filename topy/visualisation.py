@@ -7,6 +7,8 @@
 # =============================================================================
 """
 
+from __future__ import division
+
 import sys
 
 from datetime import datetime
@@ -19,10 +21,6 @@ from pyvtk import CellData, LookupTable, Scalars, UnstructuredGrid, VtkData
 
 __all__ = ['create_2d_imag', 'create_3d_geom']
 
-#  Lower bound value used for pixel/voxel culling, any value below this won't
-# be plotted. Should be same as VOID's value in 'topolgy.py'.
-THRESHOLD = 0.001
-
 def create_2d_imag(x, **kwargs):
     """
     Create an image from a 2D NumPy array (using Matplotlib commands).
@@ -32,7 +30,7 @@ def create_2d_imag(x, **kwargs):
     is determined by the value of the array entry, which must vary between 0.0
     and 1.0. A 'dd-mm-yyyy-HHhMM' timestamp is automatically added to the
     filename unless the function is called with the time='none' keyword
-    argument. Default image type is PNG.
+    argument. Default image type is PNG, other types as per Matplotlib.
 
     INPUTS:
         x -- M-by-N array (rows x columns)
@@ -68,6 +66,7 @@ def create_2d_imag(x, **kwargs):
     # ==================================
     # === End of Matplotlib commands ===
     # ==================================
+
     # Set the filename component defaults:
     keys = ['dflt_prefix', 'dflt_iternum', 'dflt_timestamp', 'dflt_filetype']
     values = ['topy_2d', 'nin', '_' + _timestamp(), 'png']
@@ -78,30 +77,67 @@ def create_2d_imag(x, **kwargs):
     savefig(fname)
     close() # close the figure
 
-def create_2d_mesh(nx, ny, **kwargs):
+def create_2d_msh(nelx, nely, fname):
     """
-    Create a 2d mesh file by specifying the number of elements in the
+    Create a 2d Gmsh MSH file by specifying the number of elements in the
     x and y direction. View the resultant file with Gmsh.
 
     ???
 
     INPUTS:
-        nx -- number of elements in the x direction
-        yx --
-        fname --
+        nelx -- The number of elements in the x direction.
+        nely -- The number of elements in the y direction.
+        fname -- The file name (a string) of the Gmsh MSH output file.
 
     OUTPUTS:
         <filename>.msh
 
-    ADDITIONAL INPUTS (keyword arguments):
-        fname -- ???
-
     EXAMPLES:
-        >>> create_2d_mesh(nx, ny, fname)
+        >>> create_2d_msh(4, 7, 'mymesh')
 
     """
-    print 'create_2d_mesh(nx, ny, **kwargs) - not coded yet!'
-    
+    # =================================
+    # === Gmsh strings for MSH file ===
+    # =================================
+    MSH_header = '$MeshFormat\n2.2 0 8\n$EndMeshFormat\n'
+    MSH_nodes = ['$Nodes\n', '$EndNodes\n']
+    MSH_elements = ['$Elements\n', '$EndElements\n']
+
+    # Total number of nodes in mesh
+    nnodes = (nelx + 1) * (nely + 1)
+    # x and y coordinates of elements
+    xcoords = arange(nelx + 1)
+    ycoords = - arange(nely + 1)
+    # Total number of elements
+    nelms = nelx * nely
+
+    # Open, write and close the MSH file
+    outputfile = open(fname + '.msh', 'w')
+    # MSH header
+    outputfile.write(MSH_header)
+    # MSH nodes
+    outputfile.write(MSH_nodes[0])
+    outputfile.write(str(nnodes)+'\n')
+    nodenum = 1
+    for x in xcoords:
+        for y in ycoords:
+            outputfile.write(str(nodenum))
+            outputfile.write(' ' + str(x) + ' ' + str(y) + ' 0' + '\n')
+            nodenum = nodenum + 1
+    outputfile.write(MSH_nodes[1])
+    # MSH elements
+    outputfile.write(MSH_elements[0])
+    outputfile.write(str(nelms)+'\n')
+    # elm-number elm-type number-of-tags < tag > ... node-number-list
+    for elem in arange(1, nelms + 1):
+        outputfile.write(str(elem) + ' 3 0 ') # 3 = Q4 element
+        nn = _node_nums_2d(nelx, nely, elem)
+        outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[2]) + ' ' + str(nn[3]) + '\n')
+    outputfile.write(MSH_elements[1])
+
+    outputfile.close()
+
+
 
 def create_3d_geom(x, **kwargs):
     """
@@ -180,6 +216,10 @@ def _write_legacy_vtu(x, fname):
     Write a legacy VTK unstructured grid file.
 
     """
+    # Lower bound value used for pixel/voxel culling, any value below this
+    # value won't be plotted. Should be same as VOID's value in 'topology.py'.
+    THRESHOLD = 0.001
+
     # Voxel local points relative to its centre of geometry:
     voxel_local_points = asarray([[-1,-1,-1],[ 1,-1,-1],[-1, 1,-1],[ 1, 1,-1],
                                 [-1,-1, 1],[ 1,-1, 1],[-1, 1, 1],[ 1, 1, 1]])\
@@ -245,5 +285,32 @@ def _fixiternum(s):
     elif len(s) == 1:
         s = '00' + s
     return s
+
+def _node_nums_2d(nelx, nely, en):
+    """
+    Return the node numbers of an element in 2D space as an array given the
+    domain's dimensions and the element's number. Numbering starts at one, then
+    column-wise from top left corner, as shown in 4-element example below:
+
+    Y
+    |
+    +---X
+
+    1---4---7---
+    | 1 | 3 |
+    2---5---8---
+    | 2 | 4 |
+    3---6---9---
+    |   |   |
+
+    EXAMPLES:
+        >>> node_nums_2d(4, 2, 5)
+        array([7, 8, 10, 11])
+
+    """
+    #inn = asarray([0, 1, nely + 1, nely + 2]) #  initial node numbers
+    inn = asarray([1, nely + 2, nely + 1, 0]) #  initial node numbers
+    nn = inn + (en + (en - 1) // nely) #  node numbers
+    return nn
 
 # EOF visualisation.py

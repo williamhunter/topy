@@ -67,3 +67,4 @@ old/
 notes/
 *.K
 examples/*/*.png
+examples/*/*.vtk
