@@ -70,6 +70,7 @@ images/
 notes/
 old/
 testing/
+tutorial/
 *.K
 examples/*/*.png
 examples/*/*.vtk
