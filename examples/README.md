@@ -33,4 +33,4 @@ A typical command:
 
 	convert -delay 35 *.png anim.gif
 	
-This will convert all the PNGs in the folder into a single GIF. Job done!
+This will convert all the PNGs in the folder into a single GIF.

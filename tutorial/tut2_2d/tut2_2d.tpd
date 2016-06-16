@@ -1,0 +1,30 @@
+[ToPy Problem Definition File v2007]
+
+PROB_NAME: tut2_2d
+
+PROB_TYPE: comp # you can add comments after a hash
+
+NUM_ELEM_X: 30
+NUM_ELEM_Y: 30
+NUM_ELEM_Z: 0 # set to zero for 2d problems
+
+VOL_FRAC: 0.444 # 20*20/30*30
+
+LOAD_NODE_X: 1 # load node number 1 ... 
+LOAD_VALU_X: 1 # in the positive X-direction
+LOAD_NODE_Y: 951 # load node number 951... 
+LOAD_VALU_Y: -1 # in the negative Y-direction
+
+FXTR_NODE_X: 31; 651 # these nodes are fixed in the X-direction
+FXTR_NODE_Y: 31; 651 # these nodes are fixed in the Y-direction
+
+ELEM_K: Q4 # element type (stiffness matrix) for 2d compliance problems
+DOF_PN: 2 # degrees of freedom per node, 2 for 2d compliance problems
+
+# Optimisation parameters:
+# If you just want a quick answer, use the below values
+ETA: 0.5 # 0.4 for 3d
+FILT_RAD: 1.5 # 1.8 for 3d
+P_FAC: 3 # up to 3.5
+Q_FAC: 2.5 # extra penalty factor (grey-scale filter)
+CHG_STOP: 0.001 # stop when objective function changes less than this

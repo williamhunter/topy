@@ -3,15 +3,12 @@
 # Author: William Hunter
 # This script handles both number of iterations and change stop criteria runs
 
-
 # Import required modules:
 from sys import argv
 
 from time import time
 
 from numpy import array
-
-from matplotlib import pyplot as pp
 
 import topy
 
@@ -30,13 +27,13 @@ def optimise():
     t.sens_analysis()
     t.filter_sens_sigmund()
     t.update_desvars_oc()
-    # Below this line we print and create images:
+    # Below this line we print info and create images or geometry:
     if t.nelz:
         topy.create_3d_geom(t.desvars, prefix=t.probname, \
         iternum=t.itercount, time='none')
     else:
         topy.create_2d_imag(t.desvars, prefix=t.probname, \
-        iternum=t.itercount, time='none')
+        iternum=t.itercount, time='none', filetype='png')
     print '%4i  | %3.6e | %3.3f | %3.4e | %3.3f | %3.3f |  %1.3f  |  %3.3f '\
     % (t.itercount, t.objfval, t.desvars.sum()/(t.nelx * t.nely * nelz), \
     t.change, t.p, t.q, t.eta.mean(), t.svtfrac)
@@ -45,10 +42,8 @@ def optimise():
 
 # Create (plot) initial design domain:
 if t.nelz:
-    #create_3d_geom(t.desvars, prefix=t.probname, iternum=0, time='none')
     nelz = t.nelz
 else:
-    #create_2d_imag(t.desvars, prefix=t.probname, iternum=0, time='none')
     nelz = 1 #  else we divide by zero
 
 # Start optimisation runs, create rest of design domains:
@@ -69,8 +64,7 @@ te = time()
 # Print solid-void ratio info:
 print '\nSolid plus void to total elements fraction = %3.5f' % (t.svtfrac)
 # Print iteration info:
-print t.itercount, 'iterations took %3.3f minutes (%3.3f min/iter. \
-or %3.3f sec/iter.)'\
-%((te - ti) / 60, (te - ti) / 60 / t.itercount, (te - ti) / t.itercount)
+print t.itercount, 'iterations took %3.3f minutes (%3.3f seconds/iteration)'\
+%((te - ti) / 60, (te - ti) / t.itercount)
 print 'Average of all ETA\'s = %3.3f (average of all a\'s = %3.3f)' \
 % (array(etas_avg).mean(), 1/array(etas_avg).mean() - 1)

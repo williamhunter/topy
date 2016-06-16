@@ -19,7 +19,7 @@ from numpy import arange, asarray
 
 from pyvtk import CellData, LookupTable, Scalars, UnstructuredGrid, VtkData
 
-__all__ = ['create_2d_imag', 'create_3d_geom']
+__all__ = ['create_2d_imag', 'create_3d_geom', 'create_2d_msh']
 
 def create_2d_imag(x, **kwargs):
     """
@@ -62,7 +62,6 @@ def create_2d_imag(x, **kwargs):
         imshow(-x, cmap=cm.gray, aspect='equal', interpolation='nearest')
     imshow(-x, cmap=cm.gray, aspect='equal', interpolation='nearest')
     axis('off')
-    axis('equal')
     # ==================================
     # === End of Matplotlib commands ===
     # ==================================
@@ -74,15 +73,13 @@ def create_2d_imag(x, **kwargs):
     # Change the default filename based on keyword arguments, if necessary:
     fname = _change_fname(fname_dict, kwargs)
     # Save the domain as image:
-    savefig(fname)
+    savefig(fname, bbox_inches='tight')
     close() # close the figure
 
 def create_2d_msh(nelx, nely, fname):
     """
     Create a 2d Gmsh MSH file by specifying the number of elements in the
-    x and y direction. View the resultant file with Gmsh.
-
-    ???
+    X and Y direction. View the resultant file with Gmsh.
 
     INPUTS:
         nelx -- The number of elements in the x direction.
@@ -93,7 +90,7 @@ def create_2d_msh(nelx, nely, fname):
         <filename>.msh
 
     EXAMPLES:
-        >>> create_2d_msh(4, 7, 'mymesh')
+        >>> create_2d_msh(4, 7, 'mymesh') # creates 'mymesh.msh'
 
     """
     # =================================

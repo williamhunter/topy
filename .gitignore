@@ -62,9 +62,14 @@ target/
 *.user
 *.suo
 
-# Other (added by williamhunter)
-old/
+# ToPy (added by williamhunter)
+*.exe
+*.svg
+*.gif
+images/
 notes/
+old/
+testing/
 *.K
 examples/*/*.png
 examples/*/*.vtk
