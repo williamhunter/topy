@@ -107,8 +107,9 @@ def _parsev2007file(s):
     """
     snew = s.splitlines()[1:]
     snew = [line.split('#')[0] for line in snew] # Get rid of all comments
-    snew = [line.replace('\t', '') for line in snew if line]
+    snew = [line.replace('\t', '') for line in snew]
     snew = [line.replace(' ', '') for line in snew]
+    snew = filter(len, snew)
 
     d = dict([line.split(':') for line in snew]) 
 
