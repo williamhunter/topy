@@ -40,8 +40,6 @@ MSG6 = 'Load vector and load value vector lengths not equal.'
 
 MSG7 = 'No load(s) or no loaded node(s) specified.'
 
-THICK_LINE = str('=' * 80)
-
 
 # ========================
 # === ToPy Error class ===
@@ -125,10 +123,7 @@ def _parsev2007file(s):
         d['DOF_PN'] = int(d['DOF_PN'])
         d['ELEM_TYPE'] = d['ELEM_K']
         d['ELEM_K'] = eval(d['ELEM_TYPE'])
-        try:
-            d['ETA'] = float(d['ETA'])
-        except ValueError:
-            d['ETA'] = lower(d['ETA'])
+        d['ETA'] = lower(d['ETA'])
     except:
         raise ToPyError(MSG2)
 
@@ -189,50 +184,29 @@ def _parsev2007file(s):
     # vector.
     dofpn = d['DOF_PN']
 
-    x = y = z = ''
-    if d.has_key('FXTR_NODE_X'):
-        x = d['FXTR_NODE_X']
-    if d.has_key('FXTR_NODE_Y'):
-        y = d['FXTR_NODE_Y']
-    if d.has_key('FXTR_NODE_Z'):
-        z = d['FXTR_NODE_Z']
+    x = d.get('FXTR_NODE_X', '')
+    y = d.get('FXTR_NODE_Y', '')
+    z = d.get('FXTR_NODE_Z', '')
     d['FIX_DOF'] = _dofvec(x, y, z, dofpn)
 
-    x = y = z = ''
-    if d.has_key('LOAD_NODE_X'):
-        x = d['LOAD_NODE_X']
-    if d.has_key('LOAD_NODE_Y'):
-        y = d['LOAD_NODE_Y']
-    if d.has_key('LOAD_NODE_Z'):
-        z = d['LOAD_NODE_Z']
+    x = d.get('LOAD_NODE_X', '')
+    y = d.get('LOAD_NODE_Y', '')
+    z = d.get('LOAD_NODE_Z', '')
     d['LOAD_DOF'] = _dofvec(x, y, z, dofpn)
 
-    x = y = z = ''
-    if d.has_key('LOAD_VALU_X'):
-        x = d['LOAD_VALU_X']
-    if d.has_key('LOAD_VALU_Y'):
-        y = d['LOAD_VALU_Y']
-    if d.has_key('LOAD_VALU_Z'):
-        z = d['LOAD_VALU_Z']
+    x = d.get('LOAD_VALU_X', '')
+    y = d.get('LOAD_VALU_Y', '')
+    z = d.get('LOAD_VALU_Z', '')
     d['LOAD_VAL'] = _valvec(x, y, z)
 
-    # Compliant mechanism synthesis values and vectors:
-    x = y = z = ''
-    if d.has_key('LOAD_NODE_X_OUT'):
-        x = d['LOAD_NODE_X_OUT']
-    if d.has_key('LOAD_NODE_Y_OUT'):
-        y = d['LOAD_NODE_Y_OUT']
-    if d.has_key('LOAD_NODE_Z_OUT'):
-        z = d['LOAD_NODE_Z_OUT']
+    x = d.get('LOAD_NODE_X_OUT', '')
+    y = d.get('LOAD_NODE_Y_OUT', '')
+    z = d.get('LOAD_NODE_Z_OUT', '')
     d['LOAD_DOF_OUT'] = _dofvec(x, y, z, dofpn)
 
-    x = y = z = ''
-    if d.has_key('LOAD_VALU_X_OUT'):
-        x = d['LOAD_VALU_X_OUT']
-    if d.has_key('LOAD_VALU_Y_OUT'):
-        y = d['LOAD_VALU_Y_OUT']
-    if d.has_key('LOAD_VALU_Z_OUT'):
-        z = d['LOAD_VALU_Z_OUT']
+    x = d.get('LOAD_VALU_X_OUT', '')
+    y = d.get('LOAD_VALU_Y_OUT', '')
+    z = d.get('LOAD_VALU_Z_OUT', '')
     d['LOAD_VAL_OUT'] = _valvec(x, y, z)
 
     # The following entries are created and added to the dictionary,
