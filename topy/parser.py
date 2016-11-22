@@ -77,11 +77,8 @@ def tpd_file2dict(fname):
         >>> tpd_file2dict('2d_beam.tpd')
 
     """
-    try:
-        f = open(fname)
-    except IOError:
-        raise ToPyError(MSG0)
-    s = f.read()
+    with open(fname, 'r') as f:
+        s = f.read()
     # Check for file version header, and parse:
     if s.startswith('[ToPy Problem Definition File v2007]') != True:
         raise ToPyError(MSG1)
@@ -106,21 +103,13 @@ def _parsev2007file(s):
     Parse a version 2007 ToPy problem definition file to a dictionary.
 
     """
-    d = {} #  Empty dictionary that we're going to fill
-    snew = []
-    s = s.splitlines()
-    for line in range(1, len(s)):
-        if s[line] and s[line][0] != '#':
-            if s[line].count('#'):
-                snew.append(s[line].rsplit('#')[0:-1][0])
-            else:
-                snew.append(s[line])
-    # Check for <TAB>s; if found print lines and exit:
-    _checkfortabs(snew)
-    # Create dictionary containing all lines of input file:
-    for i in snew:
-        pair = i.split(':')
-        d[pair[0].strip()] = pair[1].strip()
+    snew = s.splitlines()[1:]
+    snew = [line.split('#')[0] for line in snew] # Get rid of all comments
+    snew = [line.replace('\t', '') for line in snew]
+    snew = [line.replace(' ', '') for line in snew]
+    snew = filter(len, snew)
+
+    d = dict([line.split(':') for line in snew]) 
 
     # Read/convert minimum required input and convert, else exit:
     try:
@@ -134,10 +123,7 @@ def _parsev2007file(s):
         d['DOF_PN'] = int(d['DOF_PN'])
         d['ELEM_TYPE'] = d['ELEM_K']
         d['ELEM_K'] = eval(d['ELEM_TYPE'])
-        try:
-            d['ETA'] = float(d['ETA'])
-        except ValueError:
-            d['ETA'] = lower(d['ETA'])
+        d['ETA'] = lower(d['ETA'])
     except:
         raise ToPyError(MSG2)
 
@@ -198,50 +184,29 @@ def _parsev2007file(s):
     # vector.
     dofpn = d['DOF_PN']
 
-    x = y = z = ''
-    if d.has_key('FXTR_NODE_X'):
-        x = d['FXTR_NODE_X']
-    if d.has_key('FXTR_NODE_Y'):
-        y = d['FXTR_NODE_Y']
-    if d.has_key('FXTR_NODE_Z'):
-        z = d['FXTR_NODE_Z']
+    x = d.get('FXTR_NODE_X', '')
+    y = d.get('FXTR_NODE_Y', '')
+    z = d.get('FXTR_NODE_Z', '')
     d['FIX_DOF'] = _dofvec(x, y, z, dofpn)
 
-    x = y = z = ''
-    if d.has_key('LOAD_NODE_X'):
-        x = d['LOAD_NODE_X']
-    if d.has_key('LOAD_NODE_Y'):
-        y = d['LOAD_NODE_Y']
-    if d.has_key('LOAD_NODE_Z'):
-        z = d['LOAD_NODE_Z']
+    x = d.get('LOAD_NODE_X', '')
+    y = d.get('LOAD_NODE_Y', '')
+    z = d.get('LOAD_NODE_Z', '')
     d['LOAD_DOF'] = _dofvec(x, y, z, dofpn)
 
-    x = y = z = ''
-    if d.has_key('LOAD_VALU_X'):
-        x = d['LOAD_VALU_X']
-    if d.has_key('LOAD_VALU_Y'):
-        y = d['LOAD_VALU_Y']
-    if d.has_key('LOAD_VALU_Z'):
-        z = d['LOAD_VALU_Z']
+    x = d.get('LOAD_VALU_X', '')
+    y = d.get('LOAD_VALU_Y', '')
+    z = d.get('LOAD_VALU_Z', '')
     d['LOAD_VAL'] = _valvec(x, y, z)
 
-    # Compliant mechanism synthesis values and vectors:
-    x = y = z = ''
-    if d.has_key('LOAD_NODE_X_OUT'):
-        x = d['LOAD_NODE_X_OUT']
-    if d.has_key('LOAD_NODE_Y_OUT'):
-        y = d['LOAD_NODE_Y_OUT']
-    if d.has_key('LOAD_NODE_Z_OUT'):
-        z = d['LOAD_NODE_Z_OUT']
+    x = d.get('LOAD_NODE_X_OUT', '')
+    y = d.get('LOAD_NODE_Y_OUT', '')
+    z = d.get('LOAD_NODE_Z_OUT', '')
     d['LOAD_DOF_OUT'] = _dofvec(x, y, z, dofpn)
 
-    x = y = z = ''
-    if d.has_key('LOAD_VALU_X_OUT'):
-        x = d['LOAD_VALU_X_OUT']
-    if d.has_key('LOAD_VALU_Y_OUT'):
-        y = d['LOAD_VALU_Y_OUT']
-    if d.has_key('LOAD_VALU_Z_OUT'):
-        z = d['LOAD_VALU_Z_OUT']
+    x = d.get('LOAD_VALU_X_OUT', '')
+    y = d.get('LOAD_VALU_Y_OUT', '')
+    z = d.get('LOAD_VALU_Z_OUT', '')
     d['LOAD_VAL_OUT'] = _valvec(x, y, z)
 
     # The following entries are created and added to the dictionary,
@@ -353,22 +318,6 @@ def _e2sdofmapinit(nelx, nely, dofpn):
         e2s = r_[a, b, c, d, e, f, g, h]
     return e2s
 
-def _checkfortabs(s):
-    """
-    Check for tabs inside input file, return message telling where offending
-    tabs are.
-
-    """
-    l = []
-    for i in s:
-        if i.count('\t'):
-            l.append(i)
-    if len(l) > 0:
-        print '\n' + '='*80
-        for line in l:
-            print line + '\n'
-        print '='*80
-        raise ToPyError(MSG4)
 
 def _checkparams(d):
     """

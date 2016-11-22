@@ -1,4 +1,4 @@
-﻿"""
+"""
 # =============================================================================
 # A class to optimise the topology of a design domain for defined boundary
 # conditions. Data is read from an input file, see 'examples' directory.
@@ -135,7 +135,7 @@ class Topology:
         self.K = self.topydict['K'] #  Global stiffness matrix
         if self.nelz:
             print 'Domain discretisation (NUM_ELEM_X x NUM_ELEM_Y x \
-NUM_ELEM_Z) = %d x %d x %d' % (self.nelx, self.nely, self.nelz)
+            NUM_ELEM_Z) = %d x %d x %d' % (self.nelx, self.nely, self.nelz)
         else:
             print 'Domain discretisation (NUM_ELEM_X x NUM_ELEM_Y) = %d x %d'\
             % (self.nelx, self.nely)
@@ -222,19 +222,28 @@ NUM_ELEM_Z) = %d x %d x %d' % (self.nelx, self.nely, self.nelz)
             self._qmax = self.q
             self._qcon = self.numiter #  'q' stays constant for all iterations
             self._qhold = self.numiter
+            
         # (3) Exponential approximation of eta:
-        try:
+        if self.topydict['ETA'] == 'exp':
+            #  Initial value of exponent for comp and heat problems:
+            self.a = - ones(self.desvars.shape)
+            if self.probtype == 'mech':
+                #  Initial value of exponent for mech problems:
+                self.a = self.a * 7 / 3
+            self.eta = 1 / (1 - self.a)
+            print 'Damping factor (ETA) = exp'
+        else:
             self.eta = float(self.topydict['ETA']) * ones(self.desvars.shape)
             print 'Damping factor (ETA) = %3.2f' % (self.eta.mean())
-        except ValueError:
-            if self.topydict['ETA'] == 'exp':
-                #  Initial value of exponent for comp and heat problems:
-                self.a = - ones(self.desvars.shape)
-                if self.probtype == 'mech':
-                    #  Initial value of exponent for mech problems:
-                    self.a = self.a * 7 / 3
-                self.eta = 1 / (1 - self.a)
-                print 'Damping factor (ETA) = exp'
+        # except ValueError:
+        #     if self.topydict['ETA'] == 'exp':
+        #         #  Initial value of exponent for comp and heat problems:
+        #         self.a = - ones(self.desvars.shape)
+        #         if self.probtype == 'mech':
+        #             #  Initial value of exponent for mech problems:
+        #             self.a = self.a * 7 / 3
+        #         self.eta = 1 / (1 - self.a)
+        #         print 'Damping factor (ETA) = exp'
         # (4) Diagonal quadratic approximation:
         try:
             self.approx = lower(self.topydict['APPROX'])
@@ -263,7 +272,7 @@ NUM_ELEM_Z) = %d x %d x %d' % (self.nelx, self.nely, self.nelz)
                 self.loadvalout = self.topydict['LOAD_VAL_OUT']
             else:
                 raise ToPyError('Not enough input data for mechanism \
-synthesis!')
+                    synthesis!')
 
             self.rout = zeros_like(self.alldof).astype(float)
             self.rout[self.loaddofout] = self.loadvalout
@@ -317,18 +326,18 @@ synthesis!')
             itsolvers.pcg(Kfree, self.rfree, self.dfree, 1e-8, 8000, preK)
             if info < 0:
                 print 'PySparse error: Type:', info,', at', numitr, \
-'iterations.'
+                'iterations.'
                 raise ToPyError('Solution for FEA did not converge.')
             else:
                 print 'ToPy: Solution for FEA converged after', numitr, \
-'iterations.'
+                'iterations.'
             if self.probtype == 'mech':  # mechanism synthesis
                 (info, numitr, relerr) = \
                 itsolvers.pcg(Kfree, self.rfreeout, self.dfreeout, 1e-8, \
                 8000, preK)
                 if info < 0:
                     print 'PySparse error: Type:', info,', at', numitr, \
-'iterations.'
+                    'iterations.'
                     raise ToPyError('Solution for FEA of adjoint load case \
                     did not converge.')
 
@@ -588,6 +597,9 @@ synthesis!')
         self.svtfrac = (nr_s + nr_v) / self.desvars.size
 
 
+    def optimize(self, NUM_ITER):
+
+
     # ===================================
     # === Private methods and helpers ===
     # ===================================
@@ -628,5 +640,6 @@ synthesis!')
 
         K.delete_rowcols(self._rcfixed) #  Del constrained rows and columns
         return K
+
 
 # EOF topology.py
