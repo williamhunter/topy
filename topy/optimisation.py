@@ -1,5 +1,6 @@
 from os import path, makedirs
 from time import time
+from numpy import array
 
 from .visualisation import *
 from .topology import *

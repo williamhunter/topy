@@ -16,7 +16,6 @@ def optimise(fname):
     topy.optimise(t)
 
 
-    if __name__ == '__main__':
-        main(argv[1])
+if __name__ == '__main__':
+    optimise(argv[1])
 
-        
