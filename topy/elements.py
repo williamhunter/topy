@@ -16,7 +16,7 @@ from os import path
 from numpy import array, linspace, unique, sqrt, round, load
 from numpy.linalg import eigvalsh
 
-from topy.data.matlcons import _a, _nu, _E
+from .data.matlcons import _a, _nu, _E
 
 __all__ = ['Q4', 'Q5B',  'Q4a5B',  'Q4T',\
            'H8', 'H18B', 'H8T']
