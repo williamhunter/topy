@@ -10,13 +10,9 @@
 from __future__ import division
 
 import sys
-
 from datetime import datetime
-
 from pylab import axis, close, cm, figure, imshow, savefig, title
-
 from numpy import arange, asarray
-
 from pyvtk import CellData, LookupTable, Scalars, UnstructuredGrid, VtkData
 
 __all__ = ['create_2d_imag', 'create_3d_geom', 'create_2d_msh']
@@ -109,30 +105,29 @@ def create_2d_msh(nelx, nely, fname):
     nelms = nelx * nely
 
     # Open, write and close the MSH file
-    outputfile = open(fname + '.msh', 'w')
-    # MSH header
-    outputfile.write(MSH_header)
-    # MSH nodes
-    outputfile.write(MSH_nodes[0])
-    outputfile.write(str(nnodes)+'\n')
-    nodenum = 1
-    for x in xcoords:
-        for y in ycoords:
-            outputfile.write(str(nodenum))
-            outputfile.write(' ' + str(x) + ' ' + str(y) + ' 0' + '\n')
-            nodenum = nodenum + 1
-    outputfile.write(MSH_nodes[1])
-    # MSH elements
-    outputfile.write(MSH_elements[0])
-    outputfile.write(str(nelms)+'\n')
-    # elm-number elm-type number-of-tags < tag > ... node-number-list
-    for elem in arange(1, nelms + 1):
-        outputfile.write(str(elem) + ' 3 0 ') # 3 = Q4 element
-        nn = _node_nums_2d(nelx, nely, elem)
-        outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[2]) + ' ' + str(nn[3]) + '\n')
-    outputfile.write(MSH_elements[1])
+    with open(fname + '.msh', 'w') as outputfile:
+        # MSH header
+        outputfile.write(MSH_header)
+        # MSH nodes
+        outputfile.write(MSH_nodes[0])
+        outputfile.write(str(nnodes)+'\n')
+        nodenum = 1
+        for x in xcoords:
+            for y in ycoords:
+                outputfile.write(str(nodenum))
+                outputfile.write(' ' + str(x) + ' ' + str(y) + ' 0' + '\n')
+                nodenum = nodenum + 1
+        outputfile.write(MSH_nodes[1])
+        # MSH elements
+        outputfile.write(MSH_elements[0])
+        outputfile.write(str(nelms)+'\n')
+        # elm-number elm-type number-of-tags < tag > ... node-number-list
+        for elem in arange(1, nelms + 1):
+            outputfile.write(str(elem) + ' 3 0 ') # 3 = Q4 element
+            nn = _node_nums_2d(nelx, nely, elem)
+            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[2]) + ' ' + str(nn[3]) + '\n')
+        outputfile.write(MSH_elements[1])
 
-    outputfile.close()
 
 
 
@@ -185,20 +180,24 @@ def _change_fname(fd, kwargs):
     # Default file name:
     filename = fd['dflt_prefix'] + '_' + fd['dflt_iternum'] + \
     fd['dflt_timestamp'] + '.' + fd['dflt_filetype']
-    if kwargs == {}:
-        pass
-    else:
-        # This is not pretty but it works...
-        if kwargs.has_key('prefix'):
-            filename = filename.replace(fd['dflt_prefix'], kwargs['prefix'])
-        if kwargs.has_key('iternum'):
-            fixed_iternum = _fixiternum(str(kwargs['iternum']))
-            filename = filename.replace(fd['dflt_iternum'], fixed_iternum)
-        if kwargs.has_key('filetype'):
-            filename = filename.replace(fd['dflt_filetype'],
-            kwargs['filetype'])
-        if kwargs.has_key('time'):
-            filename = filename.replace(fd['dflt_timestamp'], '')
+
+    # This is not pretty but it works...
+    if kwargs.has_key('prefix'):
+        filename = filename.replace(fd['dflt_prefix'], kwargs['prefix'])
+    if kwargs.has_key('iternum'):
+        fixed_iternum = _fixiternum(str(kwargs['iternum']))
+        filename = filename.replace(fd['dflt_iternum'], fixed_iternum)
+    if kwargs.has_key('filetype'):
+        ftype = kwargs['filetype']
+        filename = filename.replace(fd['dflt_filetype'], ftype)
+    if kwargs.has_key('time'):
+        filename = filename.replace(fd['dflt_timestamp'], '')
+    if kwargs.has_key('dir'):
+        dir = kwargs['dir']
+        if not  dir[-1] == '/':
+            dir = dir + '/'
+        filename = dir + filename
+
     return filename
 
 def _write_geom(x, fname):
