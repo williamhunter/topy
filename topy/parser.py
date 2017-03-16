@@ -58,6 +58,33 @@ def tpd_file2dict(fname):
     return d
 
 
+def config2dict(config):
+    """
+    Read in *all* the parameters from config and return a dictionary.
+
+
+    INPUTS:
+        config -- config dictionary with minimal set of params.
+
+    OUTPUTS:
+        A dictionary.
+
+    ADDITIONAL INPUTS (arguments and/or keyword arguments):
+        None.
+
+    EXAMPLES:
+        >>> config2dict({'some_key': some_value})
+
+    """
+
+    d = _parse_dict(config)
+    Logger.thick_line()
+    # Very basic parameter checking, exit on error:
+    _checkparams(d)
+    # See method below...
+    return d
+
+
 # =====================================
 # === Private functions and helpers ===
 # =====================================
@@ -73,9 +100,13 @@ def _parsev2007file(s):
     snew = filter(len, snew)
 
     d = dict([line.split(':') for line in snew]) 
+    return _parse_dict(d)
 
 
-    # Read/convert minimum required input and convert, else exit:
+ 
+
+def _parse_dict(d):
+       # Read/convert minimum required input and convert, else exit:
 
     try:
         d['PROB_TYPE'] = lower(d['PROB_TYPE'])
@@ -86,9 +117,9 @@ def _parsev2007file(s):
         d['NUM_ELEM_Y'] = int(d['NUM_ELEM_Y'])
         d['NUM_ELEM_Z'] = int(d['NUM_ELEM_Z'])
         d['DOF_PN'] = int(d['DOF_PN'])
+        d['ETA'] = lower(d['ETA'])
         d['ELEM_TYPE'] = d['ELEM_K']
         d['ELEM_K'] = eval(d['ELEM_TYPE'])
-        d['ETA'] = lower(d['ETA'])
     except:
         raise ValueError('One or more parameters incorrectly specified.')
 
@@ -129,12 +160,16 @@ def _parsev2007file(s):
         d['ACTV_ELEM'] = _tpd2vec(d['ACTV_ELEM']) - 1
     except KeyError:
         d['ACTV_ELEM'] = _tpd2vec('')
+    except AttributeError:
+        pass
 
     # Check for passive elements:
     try:
         d['PASV_ELEM'] = _tpd2vec(d['PASV_ELEM']) - 1
     except KeyError:
         d['PASV_ELEM'] = _tpd2vec('')
+    except AttributeError:
+        pass
 
     # Check if diagonal quadratic approximation is required:
     try:
@@ -171,6 +206,7 @@ def _parsev2007file(s):
     y = d.get('LOAD_VALU_Y_OUT', '')
     z = d.get('LOAD_VALU_Z_OUT', '')
     d['LOAD_VAL_OUT'] = _valvec(x, y, z)
+
 
     # The following entries are created and added to the dictionary,
     # they are not specified in the ToPy problem definition file:
@@ -220,12 +256,27 @@ def _dofvec(x, y, z, dofpn):
     DOF vector.
 
     """
-    dofx = (_tpd2vec(x) - 1) * dofpn
-    dofy = (_tpd2vec(y) - 1) * dofpn + 1
+    try:
+        vec_x = _tpd2vec(x)
+    except AttributeError:
+        vec_x = np.array(x)
+
+    try:
+        vec_y = _tpd2vec(y)
+    except AttributeError:
+        vec_y = np.array(y)
+
+    try:
+        vec_z = _tpd2vec(z)
+    except AttributeError:
+        vec_z = np.array(z)
+
+    dofx = (vec_x - 1) * dofpn
+    dofy = (vec_y - 1) * dofpn + 1
     if dofpn == 2:
         dofz = []
     else:
-        dofz = (_tpd2vec(z) - 1) * dofpn + 2
+        dofz = (vec_z - 1) * dofpn + 2
     return np.r_[dofx, dofy, dofz].astype(int)
 
 def _valvec(x, y, z):
@@ -233,13 +284,25 @@ def _valvec(x, y, z):
     Values (e.g., of loads) vector.
 
     """
-    valx = _tpd2vec(x)
-    valy = _tpd2vec(y)
+    try:
+        vec_x = _tpd2vec(x)
+    except AttributeError:
+        vec_x = x
+
+    try:
+        vec_y = _tpd2vec(y)
+    except AttributeError:
+        vec_y = y
+
     if z:
-        valz = _tpd2vec(z)
+        try:
+            vec_z = _tpd2vec(z)
+        except AttributeError:
+            vec_z = z
     else:
-        valz = []
-    return np.r_[valx, valy, valz]
+        vec_z = []
+
+    return np.r_[vec_x, vec_y, vec_z]
 
 def _e2sdofmapinit(nelx, nely, dofpn):
     """
