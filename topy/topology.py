@@ -12,7 +12,7 @@ from string import lower
 import numpy as np
 import os
 from pysparse import superlu, itsolvers, precon
-from .parser import tpd_file2dict
+from .parser import tpd_file2dict, config2dict
 from .topy_logging import Logger
 
 
@@ -38,13 +38,19 @@ class Topology:
     values. Data is read from an input file (see 'examples' folder).
 
     """
-    def __init__(self):
-        self.topydict = {} #  Store tpd file data in dictionary
-        self.pcount = 0 #  Counter for continuation of p
-        self.qcount = 0 #  Counter for continuation of q for GSF
-        self.itercount = 0 #  Internal counter
-        self.change = 1
-        self.svtfrac = None
+    def __init__(self, config=None, topydict={}, pcount=0, 
+                 qcount=0, itercount=0, change=1, svtfrac=None):
+        self.pcount = pcount #  Counter for continuation of p
+        self.qcount = qcount #  Counter for continuation of q for GSF
+        self.itercount = itercount #  Internal counter
+        self.change = change
+        self.svtfrac = svtfrac
+
+        if config:
+            self.topydict = config2dict(config)
+        else:
+            self.topydict = topydict #  Store tpd file data in dictionary
+
 
     # ======================
     # === Public methods ===
