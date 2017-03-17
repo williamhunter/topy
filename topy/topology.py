@@ -110,7 +110,7 @@ class Topology:
         if not self.topydict:
             raise Exception('You must first load a TPD file!')
         self.probtype = self.topydict['PROB_TYPE'] #  Problem type
-        self.probname = self.topydict['PROB_NAME'] #  Problem name
+        self.probname = self.topydict.get('PROB_NAME', '') #  Problem name
         self.volfrac = self.topydict['VOL_FRAC'] #  Volume fraction
         self.filtrad = self.topydict['FILT_RAD'] #  Filter radius
         self.p = self.topydict['P_FAC'] #  'Standard' penalisation factor

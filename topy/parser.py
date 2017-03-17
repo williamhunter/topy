@@ -107,7 +107,7 @@ def _parsev2007file(s):
 
 def _parse_dict(d):
        # Read/convert minimum required input and convert, else exit:
-
+    d = d.copy()
     try:
         d['PROB_TYPE'] = lower(d['PROB_TYPE'])
         d['VOL_FRAC'] = float(d['VOL_FRAC'])
@@ -117,7 +117,7 @@ def _parse_dict(d):
         d['NUM_ELEM_Y'] = int(d['NUM_ELEM_Y'])
         d['NUM_ELEM_Z'] = int(d['NUM_ELEM_Z'])
         d['DOF_PN'] = int(d['DOF_PN'])
-        d['ETA'] = lower(d['ETA'])
+        d['ETA'] = lower(str(d['ETA']))
         d['ELEM_TYPE'] = d['ELEM_K']
         d['ELEM_K'] = eval(d['ELEM_TYPE'])
     except:
