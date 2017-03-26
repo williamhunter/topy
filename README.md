@@ -14,7 +14,7 @@ $ python setup.py install
 ```
 
 ## Initialization
-The main class of **ToPy** is `Topology` class. It definess the main constraints, grid and parameters of optimization. There are 2 ways how you could define the `Topology`:
+The main class of **ToPy** is `Topology`. It definess the main constraints, grid and parameters of optimization. There are 2 ways how you could define the `Topology`:
 - TPD file. It is usefull for comand line 
 - Config dictionary. This is quite close to TPD file. However, it is a way useful if the initialization in code is needed.
 
@@ -38,7 +38,7 @@ FXTR_NODE_Y: 1281
 LOAD_NODE_Y: 1
 LOAD_VALU_Y: -1
 ```
-You can read more about successful problem definition [here](https://github.com/williamhunter/topy/templates).
+You can read more about successful problem definition [here](https://github.com/williamhunter/topy/tree/master/templates).
 
 When the `.tpd` file is defined, then the rest is simple:
 
