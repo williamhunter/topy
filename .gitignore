@@ -74,3 +74,5 @@ tutorial/
 *.K
 examples/*/*.png
 examples/*/*.vtk
+
+!src/*
