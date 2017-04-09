@@ -104,7 +104,7 @@ convert -delay 35 *.png anim.gif
 ```
 
 <div align="left">	
-	<img src="src/beam_2d_reci_gsf.gif" width=40%>
-	<img src="src/inverter_2d_eta03.gif" width=30%>
-	<img src="src/t-piece_2d_Q4_eta04_gsf.gif" width=20%>
+	<img src="./src/beam_2d_reci_gsf.gif" width=40%>
+	<img src="./src/inverter_2d_eta03.gif" width=30%>
+	<img src="./src/t-piece_2d_Q4_eta04_gsf.gif" width=20%>
 </div>
