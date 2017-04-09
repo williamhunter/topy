@@ -47,7 +47,7 @@ class Topology:
         self.svtfrac = svtfrac
 
         if config:
-            self.topydict = config2dict(config)
+            self.topydict = config2dict(config.copy())
         else:
             self.topydict = topydict #  Store tpd file data in dictionary
 
