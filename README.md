@@ -58,7 +58,7 @@ config = {
      'ELEM_K': 'Q4',
      'ETA': '0.5',
      'FILT_RAD': 1.5,
-     'FXTR_NODE_X': range(1, 21),
+     'FXTR_NODE_X': range(1, 22),
      'FXTR_NODE_Y': 1281,
      'LOAD_NODE_Y': 1,
      'LOAD_VALU_Y': -1,
