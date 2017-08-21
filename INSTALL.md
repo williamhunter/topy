@@ -1,24 +1,43 @@
 # Prerequisites
 
-1. Start by installing Python 2.7 (32-bit works fine), download from the official site. If you're uing Linux, you most probably have it already.
-1. **Windows only:** Make sure Python is in your Path Environment Variable.
-	1. If you don't know how to add it, please search the web.
-	1. Check if Python works by typing it into a *cmd* shell.
-	1. Check if 'pip' works, also by typing it into a *cmd* shell. If it doesn't work, add Python27\Scripts to the Environment Variables too.
-	1. When using 'pip', run 'cmd' as Administrator.
-	1. Install NumPy+MKL for Python 2.7 from here: http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy
-	1. Install PySparse, also from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy
-	1. Install PyVTK, also from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy
-1. **Linux**: Install above packages via `pip` or by other means (e.g., apt-get, yum, rpm, etc).
-1. Install matplotlib via `pip`
-1. Install SymPy via `pip`
+1. Start by installing Python 2.7.13 (32 or 64 bit), download from
+the official Python site. If you're using Linux or Mac, you most
+probably have Python installed already.
+Unfortuamately ToPy requires Python 2.7 because of its dependence on
+Pysparse, which is only available in binary format for Python 2.7.
 
-Installing matplotlib and SymPy via other 'official' channels should also work fine (in that ToPy should still work).
+2. **Windows 10:** Make sure Python is in your 'Path' Environment
+Variable.
+	1. If you don't know how to add it to 'Path', please search the web
+	on how to do it.
+	2. Check if Python works by typing it into a *cmd* shell.
+	3. Check if `pip` works, also by typing it into a *cmd* shell. If it
+	doesn't work, add Python27\Scripts to the Environment Variables,
+	open a new *cmd* shell and check if it works.
+	4. NOTE:- When using `pip`, run `cmd` as Administrator.
+3. Download NumPy+MKL for Python 2.7 from Christoph Gohlke's website:
+http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy
+and install with `pip` 
+4. Download Pysparse, also from:
+http://www.lfd.uci.edu/~gohlke/pythonlibs/#pysparse
+and install with `pip`
+5. Install matplotlib via `pip`
+6. Install SymPy via `pip`
+7. Install PyVTK via `pip`
 
-If everything installed correctly, you're set.
+8. **Linux**: Install equivalent packages via `pip` or by other means
+(e.g., apt-get, yum, rpm,...)
+
+9. **Mac**: I don't have access to a Mac, please adapt the above
+instructions to suit.
+
+Installing matplotlib and SymPy via other 'official' channels should
+also work fine (in that ToPy should still work).
+
+If everything installed correctly, you're ready to install ToPy.
 
 # Installing ToPy
-In a terminal ('cmd' window on Windows), type:
+In a terminal ('cmd' on Windows), type:
 
 	python setup.py install
 
@@ -29,7 +48,8 @@ or if you want to install locally, type:
 You may require Administrator rights on Windows, depending on your setup.
 	
 ## Creating the element stiffness matrices
-The first time you run ToPy after a fresh install you'll see the following in your terminal:
+The first time you run ToPy after a fresh install you'll see the
+following in your terminal:
 
 	It seems as though all or some of the element stiffness matrices
 	do not exist. Creating them...
@@ -51,3 +71,8 @@ The first time you run ToPy after a fresh install you'll see the following in yo
 	
 You won't (shouldn't) see it again, even if ToPy is updated, since these
 files shouldn't need to change.
+---
+William Hunter
+Date: 2017-08-21
+
+
