@@ -109,6 +109,8 @@ following in your terminal:
 You won't (shouldn't) see it again, even if ToPy is updated, since these
 files shouldn't need to change. You can create the stiffness matrices without
 solving a problem by simply running 'optimise.py' in the 'scripts' folder.
----
+
+--
+
 William Hunter
 Date: 2017-08-21
