@@ -1,9 +1,13 @@
 # Changes
 
+v0.3.2
+1. Speed improvements, some refactoring, new functionality -
+by Ivan Sosnovik
+
 v0.2.3
 ---
-1. Added create_2d_msh function to visualisation.py, see 2D problems Tutorial
-1 for an explanation of how it is used.
+1. Added create_2d_msh function to visualisation.py, see 2D problems
+Tutorial 1 for an explanation of how it is used.
 
 v0.2.2
 ---
@@ -15,8 +19,8 @@ v0.2.2
 v0.2.1
 ---
 1. Moved ToPy from Google Code to GitHub.
-1. Updated files, moved a few things around, renamed/deleted a few, etc. No
-changes to the core.
+1. Updated files, moved a few things around, renamed/deleted a few, etc.
+No changes to the core.
 
 v0.1.1
 ---
