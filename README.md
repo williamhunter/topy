@@ -3,7 +3,10 @@
 	<img src="./src/ToPy_logo.png">
 </div>
 
-ToPy is a lightweight topology optimization framework for Python, please refer to the [ToPy wiki](https://github.com/williamhunter/topy/wiki) for further information.
+ToPy is a lightweight topology optimization framework for Python that can solve
+compliance (stiffness), mechanism synthesis and heat conduction problems in 2D and 3D.
+Please refer to the [ToPy Wiki](https://github.com/williamhunter/topy/wiki) for further information.
+
 ToPy was originally hosted on Google Code.
 
 ## Installation
@@ -25,7 +28,8 @@ grid and parameters of optimization -- but you don't really have to bother
 yourself with this if you just want to get some results.
 
 ### There are two ways of defining a problem
-1. **TPD file**: You define the problem with keywords (see Help) in a simple text file and solve via the command line
+1. **TPD file**: You define the problem with keywords
+(see [Help](https://github.com/williamhunter/topy/wiki/Help)) in a simple text file and solve via the command line
 2. **Config dictionary**: This is similar to the TPD file approach, however,
 you define the problem directly in a Python file; it's very useful if you want to
 experiment and don't want to keep making changes to a text file.
@@ -91,7 +95,7 @@ The requirements are the same as for `.tpd` file.
 ```Python
 topology = Topology(config=config)
 ```
-## Optimization (solving the problem)
+### Optimization (solving the problem)
 
 You can use the one-line solution:
 
@@ -110,7 +114,7 @@ t.set_top_params()
 topy.optimise(t)
 ```
 
-## Visualization (seeing the result)
+### Visualization (seeing the result)
 Module `topy.visualization` allows one to save the output as a `.png` image for 2D problems or as a `.vtk` file for 3D. You can animate the obtained images with
 the [convert](https://www.imagemagick.org/script/convert.php) tool.
 
@@ -123,3 +127,9 @@ convert -delay 35 *.png anim.gif
 	<img src="./src/inverter_2d_eta03.gif" width=30%>
 	<img src="./src/t-piece_2d_Q4_eta04_gsf.gif" width=20%>
 </div>
+
+## Tutorial
+[Tutorial](https://github.com/williamhunter/topy/wiki/Tutorial)
+
+## Examples
+[Examples](https://github.com/williamhunter/topy/wiki/Examples)
