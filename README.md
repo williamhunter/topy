@@ -7,7 +7,7 @@ ToPy is a lightweight topology optimization framework for Python, please refer t
 ToPy was originally hosted on Google Code.
 
 ## Installation
-Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/master/INSTALL.md))
+Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md))
 file all you need to do is the following:
 
 ```bash
