@@ -74,5 +74,7 @@ tutorial/
 *.K
 examples/*/*.png
 examples/*/*.vtk
+*.msh
 
-!src/*
+# Don't ignore what's inside imgsrc
+!imgsrc/*
