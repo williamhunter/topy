@@ -133,3 +133,16 @@ convert -delay 35 *.png anim.gif
 
 ## Examples
 [Examples](https://github.com/williamhunter/topy/wiki/Examples)
+
+## How to cite ToPy
+If you've used ToPy in your research work, please consider to cite:
+```
+@misc{Hunter2007william,
+  author = {Hunter, William and others},
+  title = {ToPy - Topology optimization with Python},
+  year = {2017},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/williamhunter/topy}},
+  }
+```
