@@ -1,12 +1,14 @@
 # ToPy
 <div align="center">
-	<img src="./src/ToPy_logo.png" width=50%>
+	<img src="./src/ToPy_logo.png">
 </div>
 
-ToPy is a lightweight topology optimization framework for Python. It was originally hosted on Google Code, please refer to the [ToPy wiki](https://github.com/williamhunter/topy/wiki) for further information.
+ToPy is a lightweight topology optimization framework for Python, please refer to the [ToPy wiki](https://github.com/williamhunter/topy/wiki) for further information.
+ToPy was originally hosted on Google Code.
 
 ## Installation
-Once you've downloaded the depenencies (see the INSTALL.md file) all you need to do is the following:
+Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/master/INSTALL.md))
+file all you need to do is the following:
 
 ```bash
 $ git clone https://github.com/williamhunter/topy.git
