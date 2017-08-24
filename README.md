@@ -1,6 +1,6 @@
 # ToPy
 <div align="center">
-	<img src="./src/ToPy_logo.png">
+	<img src="./imgsrc/ToPy_logo.png">
 </div>
 
 ToPy is a lightweight topology optimization framework for Python that can solve
@@ -123,9 +123,9 @@ convert -delay 35 *.png anim.gif
 ```
 
 <div align="left">
-	<img src="./src/beam_2d_reci_gsf.gif" width=40%>
-	<img src="./src/inverter_2d_eta03.gif" width=30%>
-	<img src="./src/t-piece_2d_Q4_eta04_gsf.gif" width=20%>
+	<img src="./imgsrc/beam_2d_reci_gsf.gif" width=40%>
+	<img src="./imgsrc/inverter_2d_eta03.gif" width=30%>
+	<img src="./imgsrc/t-piece_2d_Q4_eta04_gsf.gif" width=20%>
 </div>
 
 ## Tutorials
