@@ -76,5 +76,5 @@ examples/*/*.png
 examples/*/*.vtk
 *.msh
 
-# Don't ignore what's inside imgsrc
+# DON'T (!) ignore what's inside imgsrc
 !imgsrc/*
