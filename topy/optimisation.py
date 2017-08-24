@@ -9,8 +9,8 @@ from .topy_logging import *
 
 __all__ = ['optimise']
 
-def optimise(topology, save=True, dir='./steps'):
-    
+def optimise(topology, save=True, dir='./iterations'):
+
     if not path.exists(dir):
         makedirs(dir)
     etas_avg = []
@@ -51,7 +51,7 @@ def optimise(topology, save=True, dir='./steps'):
     # Create (plot) initial design domain:
 
     # Start optimisation runs, create rest of design domains:
-    str_ = '%5s | %11s | %5s | %10s | %5s | %5s | %7s | %5s ' 
+    str_ = '%5s | %11s | %5s | %10s | %5s | %5s | %7s | %5s '
     format_ = ('Iter', 'Obj. func.  ', 'Vol. ', 'Change    ', \
         'P_FAC', 'Q_FAC', 'Ave ETA', 'S-V frac.')
     Logger.display(str_ % format_)
@@ -75,6 +75,3 @@ def optimise(topology, save=True, dir='./steps'):
         %((te - ti) / 60, (te - ti) / topology.itercount))
     Logger.display('Average of all ETA\'s = %3.3f (average of all a\'s = %3.3f)' \
         % (array(etas_avg).mean(), 1/array(etas_avg).mean() - 1))
-
-
-
