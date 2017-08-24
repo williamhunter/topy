@@ -128,8 +128,8 @@ convert -delay 35 *.png anim.gif
 	<img src="./src/t-piece_2d_Q4_eta04_gsf.gif" width=20%>
 </div>
 
-## Tutorial
-[Tutorial](https://github.com/williamhunter/topy/wiki/Tutorial)
+## Tutorials
+[Tutorials](https://github.com/williamhunter/topy/wiki/Tutorials)
 
 ## Examples
 [Examples](https://github.com/williamhunter/topy/wiki/Examples)
