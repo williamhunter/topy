@@ -1,11 +1,17 @@
 # ToPy
+<div align="center">
+	<img src="./src/ToPy_logo.png">
+</div>
 
-![ToPy Logo](https://cloud.githubusercontent.com/assets/14232913/16171741/64c6665c-3577-11e6-868c-c86f3520c594.png)
+ToPy is a lightweight topology optimization framework for Python that can solve
+compliance (stiffness), mechanism synthesis and heat conduction problems in 2D and 3D.
+Please refer to the [ToPy Wiki](https://github.com/williamhunter/topy/wiki) for further information.
 
-ToPy is a lightweight topology optimization framework for Python. It was originally hosted on Google Code, please refer to the [ToPy wiki](https://github.com/williamhunter/topy/wiki) for further information.
+ToPy was originally hosted on Google Code.
 
 ## Installation
-All you need to do is the following:
+Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md))
+file all you need to do is the following:
 
 ```bash
 $ git clone https://github.com/williamhunter/topy.git
@@ -16,11 +22,16 @@ $ python setup.py install
 Alternatively, you can download the latest stable release, but it usually lags
 a little behind the Master branch (as can be expected).
 
-## Initialization
-The main class of **ToPy** is 'Topology'. It defines the main constraints, grid and parameters of optimization. There are two ways of defining a problem:
-1. **TPD file**: You define the problem in a tet file and solve via the command line
-2. **Config dictionary**: This is quite close to the TPD file, however,
-you define the problem in a Python file; it's very useful if you want to
+## Getting started
+The main class of **ToPy** is 'Topology'. It defines the main constraints,
+grid and parameters of optimization -- but you don't really have to bother
+yourself with this if you just want to get some results.
+
+### There are two ways of defining a problem
+1. **TPD file**: You define the problem with keywords
+(see [Help](https://github.com/williamhunter/topy/wiki/Help)) in a simple text file and solve via the command line
+2. **Config dictionary**: This is similar to the TPD file approach, however,
+you define the problem directly in a Python file; it's very useful if you want to
 experiment and don't want to keep making changes to a text file.
 You can later save the Config to a text file (a TPD file).
 
@@ -84,7 +95,7 @@ The requirements are the same as for `.tpd` file.
 ```Python
 topology = Topology(config=config)
 ```
-## Optimization (solving the problem)
+### Optimization (solving the problem)
 
 You can use the one-line solution:
 
@@ -103,7 +114,7 @@ t.set_top_params()
 topy.optimise(t)
 ```
 
-## Visualization
+### Visualization (seeing the result)
 Module `topy.visualization` allows one to save the output as a `.png` image for 2D problems or as a `.vtk` file for 3D. You can animate the obtained images with
 the [convert](https://www.imagemagick.org/script/convert.php) tool.
 
@@ -116,3 +127,22 @@ convert -delay 35 *.png anim.gif
 	<img src="./src/inverter_2d_eta03.gif" width=30%>
 	<img src="./src/t-piece_2d_Q4_eta04_gsf.gif" width=20%>
 </div>
+
+## Tutorials
+[Tutorials](https://github.com/williamhunter/topy/wiki/Tutorials)
+
+## Examples
+[Examples](https://github.com/williamhunter/topy/wiki/Examples)
+
+## How to cite ToPy
+If you've used ToPy in your research work, please consider to cite:
+```
+@misc{Hunter2007william,
+  author = {Hunter, William and others},
+  title = {ToPy - Topology optimization with Python},
+  year = {2017},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/williamhunter/topy}},
+  }
+```
