@@ -3,7 +3,7 @@
 # Functions in order to visualise 2D and 3D NumPy arrays.
 #
 # Author: William Hunter
-# Copyright (C) 2008, 2015, 2016, William Hunter.
+# Copyright (C) 2008, 2015, 2016, 2017 William Hunter.
 # =============================================================================
 """
 
@@ -12,10 +12,11 @@ from __future__ import division
 import sys
 from datetime import datetime
 from pylab import axis, close, cm, figure, imshow, savefig, title
-from numpy import arange, asarray
+from numpy import arange, asarray, hstack
 from pyvtk import CellData, LookupTable, Scalars, UnstructuredGrid, VtkData
 
-__all__ = ['create_2d_imag', 'create_3d_geom', 'create_2d_msh']
+__all__ = ['create_2d_imag', 'create_3d_geom', 'node_nums_2d', 'node_nums_3d',
+'create_2d_msh','create_3d_msh']
 
 def create_2d_imag(x, **kwargs):
     """
@@ -72,65 +73,6 @@ def create_2d_imag(x, **kwargs):
     savefig(fname, bbox_inches='tight')
     close() # close the figure
 
-def create_2d_msh(nelx, nely, fname):
-    """
-    Create a 2d Gmsh MSH file by specifying the number of elements in the
-    X and Y direction. View the resultant file with Gmsh.
-
-    INPUTS:
-        nelx -- The number of elements in the x direction.
-        nely -- The number of elements in the y direction.
-        fname -- The file name (a string) of the Gmsh MSH output file.
-
-    OUTPUTS:
-        <filename>.msh
-
-    EXAMPLES:
-        >>> create_2d_msh(4, 7, 'mymesh') # creates 'mymesh.msh'
-
-    """
-    # =================================
-    # === Gmsh strings for MSH file ===
-    # =================================
-    MSH_header = '$MeshFormat\n2.2 0 8\n$EndMeshFormat\n'
-    MSH_nodes = ['$Nodes\n', '$EndNodes\n']
-    MSH_elements = ['$Elements\n', '$EndElements\n']
-
-    # Total number of nodes in mesh
-    nnodes = (nelx + 1) * (nely + 1)
-    # x and y coordinates of elements
-    xcoords = arange(nelx + 1)
-    ycoords = - arange(nely + 1)
-    # Total number of elements
-    nelms = nelx * nely
-
-    # Open, write and close the MSH file
-    with open(fname + '.msh', 'w') as outputfile:
-        # MSH header
-        outputfile.write(MSH_header)
-        # MSH nodes
-        outputfile.write(MSH_nodes[0])
-        outputfile.write(str(nnodes)+'\n')
-        nodenum = 1
-        for x in xcoords:
-            for y in ycoords:
-                outputfile.write(str(nodenum))
-                outputfile.write(' ' + str(x) + ' ' + str(y) + ' 0' + '\n')
-                nodenum = nodenum + 1
-        outputfile.write(MSH_nodes[1])
-        # MSH elements
-        outputfile.write(MSH_elements[0])
-        outputfile.write(str(nelms)+'\n')
-        # elm-number elm-type number-of-tags < tag > ... node-number-list
-        for elem in arange(1, nelms + 1):
-            outputfile.write(str(elem) + ' 3 0 ') # 3 = Q4 element
-            nn = _node_nums_2d(nelx, nely, elem)
-            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[2]) + ' ' + str(nn[3]) + '\n')
-        outputfile.write(MSH_elements[1])
-
-
-
-
 def create_3d_geom(x, **kwargs):
     """
     Create 3D geometry from a 3D NumPy array.
@@ -171,6 +113,190 @@ def create_3d_geom(x, **kwargs):
     fname = _change_fname(fname_dict, kwargs)
     # Save the domain as geometry:
     _write_geom(x, fname)
+
+def node_nums_2d(nelx, nely, en):
+    """
+    Return the node numbers of an element in 2D space as an array given the
+    domain's dimensions and the element's number (en). Numbering starts at one,
+    then column-wise from top left corner, as shown in 4-element example below:
+
+    Y
+    |
+    +---X
+
+    1---4---7---
+    | 1 | 3 |
+    2---5---8---
+    | 2 | 4 |
+    3---6---9---
+    |   |   |
+
+    EXAMPLES:
+        >>> _node_nums_2d(2, 2, 4)
+        array([5, 6, 8, 9])
+
+    """
+    if en > nelx * nely:
+        raise Exception('Mesh does not contain specified element number.')
+    fenn = asarray([1, 2, nely + 2, nely + 3]) #  first element's node numbers
+    nn = fenn + (en + (en - 1) // nely) #  the element's node numbers
+    return nn
+
+def node_nums_3d(nelx, nely, nelz, en):
+    """
+    Return the node numbers of an element in 3D space as an array given the
+    domain's dimensions and the element's number (en). Numbering starts at one,
+    then columnwise from top left corner, in the positive z-axis direction
+    (where the z-axis points out of the screen). See 2-element example below:
+
+       Y
+       |
+       +---X
+      /
+     Z
+
+        1---3---5
+       /|  /|  /|
+      / 2-/-4-/-6
+     7-/-9-/-11/
+     |/  |/  |/
+     8---10--12
+
+    EXAMPLES:
+        >>> node_nums_3d(4, 3, 2, 17)
+        array([???])
+
+    """
+    # innrear = asarray([1, nely + 2, nely + 1, 0]) #  initial node numbers at rear
+    # enrear = nely * (en - 1) + en
+    # nnrear = innrear + enrear + en - 1 #  node numbers at the rear
+    # nnfront = nnrear + (nelx + 1) * (nely + 1) #  node numbers at the front
+    # nn = hstack((nnrear, nnfront)) + (en - 1) * (nelx + 1) * (nely + 1)
+    if en > nelx * nely * nelz:
+        raise Exception('Mesh does not contain specified element number.')
+    pen = en % (nelx * nely) #  projected element number on rear face
+    if pen == 0:
+        pen = nelx * nely
+
+    _node_nums_2d(nelx, nely, pen)
+    #TO-DO: finish rest of function
+    return nn
+
+def create_2d_msh(nelx, nely, fname):
+    """
+    Create a 2d Gmsh MSH file by specifying the number of elements in the
+    X and Y direction. View the resultant file with Gmsh.
+
+    INPUTS:
+        nelx -- The number of elements in the x direction.
+        nely -- The number of elements in the y direction.
+        fname -- The file name (a string) of the Gmsh MSH output file.
+
+    OUTPUTS:
+        <filename>.msh
+
+    EXAMPLES:
+        >>> create_2d_msh(4, 7, 'my2dmesh') # creates 'my2dmesh.msh'
+
+    """
+    # =================================
+    # === Gmsh strings for MSH file ===
+    # =================================
+    MSH_header = '$MeshFormat\n2.2 0 8\n$EndMeshFormat\n'
+    MSH_nodes = ['$Nodes\n', '$EndNodes\n']
+    MSH_elements = ['$Elements\n', '$EndElements\n']
+
+    # Total number of nodes in mesh
+    nnodes = (nelx + 1) * (nely + 1)
+    # x and y coordinates of elements
+    xcoords = arange(nelx + 1)
+    ycoords = - arange(nely + 1)
+    # Total number of elements
+    nelms = nelx * nely
+
+    # Open, write and close the MSH file
+    with open(fname + '.msh', 'w') as outputfile:
+        # MSH header
+        outputfile.write(MSH_header)
+        # MSH nodes
+        outputfile.write(MSH_nodes[0])
+        outputfile.write(str(nnodes)+'\n')
+        nodenum = 1
+        for x in xcoords:
+            for y in ycoords:
+                outputfile.write(str(nodenum))
+                outputfile.write(' ' + str(x) + ' ' + str(y) + ' 0' + '\n')
+                nodenum = nodenum + 1
+        outputfile.write(MSH_nodes[1])
+        # MSH elements
+        outputfile.write(MSH_elements[0])
+        outputfile.write(str(nelms)+'\n')
+        # elm-number elm-type number-of-tags < tag > ... node-number-list
+        for elem in arange(1, nelms + 1):
+            outputfile.write(str(elem) + ' 3 0 ') # 3 is a 4-node quadrangle
+            nn = _node_nums_2d(nelx, nely, elem)
+            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[2]) + ' ' + str(nn[3]) + '\n')
+        outputfile.write(MSH_elements[1])
+
+def create_3d_msh(nelx, nely, nelz, fname):
+    """
+    Create a 3d Gmsh MSH file by specifying the number of elements in the
+    X, Y and Z direction. View the resultant file with Gmsh.
+
+    INPUTS:
+        nelx -- The number of elements in the x direction.
+        nely -- The number of elements in the y direction.
+        nely -- The number of elements in the y direction.
+        fname -- The file name (a string) of the Gmsh MSH output file.
+
+    OUTPUTS:
+        <filename>.msh
+
+    EXAMPLES:
+        >>> create_3d_msh(4, 5, 6, 'my3dmesh') # creates 'my3dmesh.msh'
+
+    """
+    # =================================
+    # === Gmsh strings for MSH file ===
+    # =================================
+    MSH_header = '$MeshFormat\n2.2 0 8\n$EndMeshFormat\n'
+    MSH_nodes = ['$Nodes\n', '$EndNodes\n']
+    MSH_elements = ['$Elements\n', '$EndElements\n']
+
+    # Total number of nodes in mesh
+    nnodes = (nelx + 1) * (nely + 1) * (nelz + 1)
+    # x, y and z coordinates of elements
+    xcoords = arange(nelx + 1)
+    ycoords = - arange(nely + 1)
+    zcoords = arange(nelz + 1)
+    # Total number of elements
+    nelms = nelx * nely * nelz
+
+    # Open, write and close the MSH file
+    with open(fname + '.msh', 'w') as outputfile:
+        # MSH header
+        outputfile.write(MSH_header)
+        # MSH nodes
+        outputfile.write(MSH_nodes[0])
+        outputfile.write(str(nnodes) + '\n')
+        nodenum = 1
+        for x in xcoords:
+            for y in ycoords:
+                for z in zcoords:
+                    outputfile.write(str(nodenum))
+                    outputfile.write(' ' + str(x) + ' ' + str(y) + ' ' + str(z) + '\n')
+                    nodenum = nodenum + 1
+        outputfile.write(MSH_nodes[1])
+        # MSH elements
+        outputfile.write(MSH_elements[0])
+        outputfile.write(str(nelms)+'\n')
+        # elm-number elm-type number-of-tags < tag > ... node-number-list
+        for elem in arange(1, nelms + 1):
+            outputfile.write(str(elem) + ' 5 0 ') # 5 is a 8-node hexahedron
+            nn = _node_nums_3d(nelx, nely, nelz, elem)
+            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[2]) + ' ' + str(nn[3]) + \
+                             str(nn[4]) + ' ' + str(nn[5]) + ' ' + str(nn[6]) + ' ' + str(nn[7]) + '\n')
+        outputfile.write(MSH_elements[1])
 
 
 # =====================================
@@ -281,32 +407,5 @@ def _fixiternum(s):
     elif len(s) == 1:
         s = '00' + s
     return s
-
-def _node_nums_2d(nelx, nely, en):
-    """
-    Return the node numbers of an element in 2D space as an array given the
-    domain's dimensions and the element's number. Numbering starts at one, then
-    column-wise from top left corner, as shown in 4-element example below:
-
-    Y
-    |
-    +---X
-
-    1---4---7---
-    | 1 | 3 |
-    2---5---8---
-    | 2 | 4 |
-    3---6---9---
-    |   |   |
-
-    EXAMPLES:
-        >>> node_nums_2d(4, 2, 5)
-        array([7, 8, 10, 11])
-
-    """
-    #inn = asarray([0, 1, nely + 1, nely + 2]) #  initial node numbers
-    inn = asarray([1, nely + 2, nely + 1, 0]) #  initial node numbers
-    nn = inn + (en + (en - 1) // nely) #  node numbers
-    return nn
 
 # EOF visualisation.py
