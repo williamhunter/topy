@@ -138,8 +138,8 @@ def node_nums_2d(nelx, nely, en):
     """
     if en > nelx * nely:
         raise Exception('Mesh does not contain specified element number.')
-    fenn = asarray([1, 2, nely + 2, nely + 3]) #  first element's node numbers
-    nn = fenn + (en + (en - 1) // nely) #  the element's node numbers
+    inn = asarray([0, 1, nely + 1, nely + 2]) #  initial node numbers
+    nn = inn + (en + (en - 1) // nely) #  the element's node numbers
     return nn
 
 def node_nums_3d(nelx, nely, nelz, en):
@@ -172,14 +172,18 @@ def node_nums_3d(nelx, nely, nelz, en):
     # nnrear = innrear + enrear + en - 1 #  node numbers at the rear
     # nnfront = nnrear + (nelx + 1) * (nely + 1) #  node numbers at the front
     # nn = hstack((nnrear, nnfront)) + (en - 1) * (nelx + 1) * (nely + 1)
+    xygridsize = nelx * nely
     if en > nelx * nely * nelz:
         raise Exception('Mesh does not contain specified element number.')
-    pen = en % (nelx * nely) #  projected element number on rear face
+    pen = en % (xygridsize) #  projected element number on rearmost face
     if pen == 0:
-        pen = nelx * nely
+        pen = xygridsize
 
-    _node_nums_2d(nelx, nely, pen)
-    #TO-DO: finish rest of function
+    nnzero = node_nums_2d(nelx, nely, pen) #  node numbers at rearmost face
+    zinc = (en - 1) // xygridsize * (nelx + 1) * (nely + 1)
+    nnr = nnzero + zinc
+    nnf = nnr + (nelx + 1) * (nely + 1)
+    nn = hstack( (nnr, nnf) )
     return nn
 
 def create_2d_msh(nelx, nely, fname):
@@ -234,8 +238,8 @@ def create_2d_msh(nelx, nely, fname):
         # elm-number elm-type number-of-tags < tag > ... node-number-list
         for elem in arange(1, nelms + 1):
             outputfile.write(str(elem) + ' 3 0 ') # 3 is a 4-node quadrangle
-            nn = _node_nums_2d(nelx, nely, elem)
-            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[2]) + ' ' + str(nn[3]) + '\n')
+            nn = node_nums_2d(nelx, nely, elem)
+            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[3]) + ' ' + str(nn[2]) + '\n')
         outputfile.write(MSH_elements[1])
 
 def create_3d_msh(nelx, nely, nelz, fname):
@@ -246,7 +250,7 @@ def create_3d_msh(nelx, nely, nelz, fname):
     INPUTS:
         nelx -- The number of elements in the x direction.
         nely -- The number of elements in the y direction.
-        nely -- The number of elements in the y direction.
+        nelz -- The number of elements in the z direction.
         fname -- The file name (a string) of the Gmsh MSH output file.
 
     OUTPUTS:
@@ -280,9 +284,9 @@ def create_3d_msh(nelx, nely, nelz, fname):
         outputfile.write(MSH_nodes[0])
         outputfile.write(str(nnodes) + '\n')
         nodenum = 1
-        for x in xcoords:
-            for y in ycoords:
-                for z in zcoords:
+        for z in zcoords:
+            for x in xcoords:
+                for y in ycoords:
                     outputfile.write(str(nodenum))
                     outputfile.write(' ' + str(x) + ' ' + str(y) + ' ' + str(z) + '\n')
                     nodenum = nodenum + 1
@@ -293,9 +297,9 @@ def create_3d_msh(nelx, nely, nelz, fname):
         # elm-number elm-type number-of-tags < tag > ... node-number-list
         for elem in arange(1, nelms + 1):
             outputfile.write(str(elem) + ' 5 0 ') # 5 is a 8-node hexahedron
-            nn = _node_nums_3d(nelx, nely, nelz, elem)
-            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[2]) + ' ' + str(nn[3]) + \
-                             str(nn[4]) + ' ' + str(nn[5]) + ' ' + str(nn[6]) + ' ' + str(nn[7]) + '\n')
+            nn = node_nums_3d(nelx, nely, nelz, elem)
+            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[3]) + ' ' + str(nn[2]) + ' ' + \
+                             str(nn[4]) + ' ' + str(nn[5]) + ' ' + str(nn[7]) + ' ' + str(nn[6]) + '\n')
         outputfile.write(MSH_elements[1])
 
 
