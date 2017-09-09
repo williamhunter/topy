@@ -35,7 +35,7 @@ def create_2d_imag(x, **kwargs):
     OUTPUTS:
         <filename>.png
 
-    ADDITIONAL INPUTS (keyword arguments):
+    OPTIONAL INPUTS (keyword arguments):
         prefix -- A user given prefix for the file name; default is 'topy_2d'.
         filetype -- The visualisation file type, see above.
         iternum -- A number that will be appended after the filename; default
@@ -92,7 +92,7 @@ def create_3d_geom(x, **kwargs):
     OUTPUTS:
         <filename>.<type>
 
-    ADDITIONAL INPUTS (keyword arguments):
+    OPTIONAL INPUTS (keyword arguments):
         prefix -- A user given prefix for the file name; default is 'topy_3d'.
         filetype -- The visualisation file type, see above.
         iternum -- A number that will be appended after the filename; default
@@ -114,81 +114,9 @@ def create_3d_geom(x, **kwargs):
     # Save the domain as geometry:
     _write_geom(x, fname)
 
-def node_nums_2d(nelx, nely, en):
-    """
-    Return the node numbers of an element in 2D space as an array given the
-    domain's dimensions and the element's number (en). Numbering starts at one,
-    then column-wise from top left corner, as shown in 4-element example below:
-
-    Y
-    |
-    +---X
-
-    1---4---7---
-    | 1 | 3 |
-    2---5---8---
-    | 2 | 4 |
-    3---6---9---
-    |   |   |
-
-    EXAMPLES:
-        >>> _node_nums_2d(2, 2, 4)
-        array([5, 6, 8, 9])
-
-    """
-    if en > nelx * nely:
-        raise Exception('Mesh does not contain specified element number.')
-    inn = asarray([0, 1, nely + 1, nely + 2]) #  initial node numbers
-    nn = inn + (en + (en - 1) // nely) #  the element's node numbers
-    return nn
-
-def node_nums_3d(nelx, nely, nelz, en):
-    """
-    Return the node numbers of an element in 3D space as an array given the
-    domain's dimensions and the element's number (en). Numbering starts at one,
-    then columnwise from top left corner, in the positive z-axis direction
-    (where the z-axis points out of the screen). See 2-element example below:
-
-       Y
-       |
-       +---X
-      /
-     Z
-
-        1---3---5
-       /|  /|  /|
-      / 2-/-4-/-6
-     7-/-9-/-11/
-     |/  |/  |/
-     8---10--12
-
-    EXAMPLES:
-        >>> node_nums_3d(4, 3, 2, 17)
-        array([???])
-
-    """
-    # innrear = asarray([1, nely + 2, nely + 1, 0]) #  initial node numbers at rear
-    # enrear = nely * (en - 1) + en
-    # nnrear = innrear + enrear + en - 1 #  node numbers at the rear
-    # nnfront = nnrear + (nelx + 1) * (nely + 1) #  node numbers at the front
-    # nn = hstack((nnrear, nnfront)) + (en - 1) * (nelx + 1) * (nely + 1)
-    xygridsize = nelx * nely
-    if en > nelx * nely * nelz:
-        raise Exception('Mesh does not contain specified element number.')
-    pen = en % (xygridsize) #  projected element number on rearmost face
-    if pen == 0:
-        pen = xygridsize
-
-    nnzero = node_nums_2d(nelx, nely, pen) #  node numbers at rearmost face
-    zinc = (en - 1) // xygridsize * (nelx + 1) * (nely + 1)
-    nnr = nnzero + zinc
-    nnf = nnr + (nelx + 1) * (nely + 1)
-    nn = hstack( (nnr, nnf) )
-    return nn
-
 def create_2d_msh(nelx, nely, fname):
     """
-    Create a 2d Gmsh MSH file by specifying the number of elements in the
+    Create a 2d Gmsh MSH ASCII file by specifying the number of elements in the
     X and Y direction. View the resultant file with Gmsh.
 
     INPUTS:
@@ -203,9 +131,7 @@ def create_2d_msh(nelx, nely, fname):
         >>> create_2d_msh(4, 7, 'my2dmesh') # creates 'my2dmesh.msh'
 
     """
-    # =================================
-    # === Gmsh strings for MSH file ===
-    # =================================
+    # Gmsh strings for MSH file
     MSH_header = '$MeshFormat\n2.2 0 8\n$EndMeshFormat\n'
     MSH_nodes = ['$Nodes\n', '$EndNodes\n']
     MSH_elements = ['$Elements\n', '$EndElements\n']
@@ -244,7 +170,7 @@ def create_2d_msh(nelx, nely, fname):
 
 def create_3d_msh(nelx, nely, nelz, fname):
     """
-    Create a 3d Gmsh MSH file by specifying the number of elements in the
+    Create a 3d Gmsh MSH ASCII file by specifying the number of elements in the
     X, Y and Z direction. View the resultant file with Gmsh.
 
     INPUTS:
@@ -260,9 +186,7 @@ def create_3d_msh(nelx, nely, nelz, fname):
         >>> create_3d_msh(4, 5, 6, 'my3dmesh') # creates 'my3dmesh.msh'
 
     """
-    # =================================
-    # === Gmsh strings for MSH file ===
-    # =================================
+    # Gmsh strings for MSH file
     MSH_header = '$MeshFormat\n2.2 0 8\n$EndMeshFormat\n'
     MSH_nodes = ['$Nodes\n', '$EndNodes\n']
     MSH_elements = ['$Elements\n', '$EndElements\n']
@@ -302,6 +226,74 @@ def create_3d_msh(nelx, nely, nelz, fname):
                              str(nn[4]) + ' ' + str(nn[5]) + ' ' + str(nn[7]) + ' ' + str(nn[6]) + '\n')
         outputfile.write(MSH_elements[1])
 
+def node_nums_2d(nelx, nely, en):
+    """
+    Return the node numbers of an element in 2D space as an array given the
+    domain's dimensions and the element's number (en). Numbering starts at one,
+    then column-wise from top left corner in the negative y-axis direction.
+    See 4-element example below:
+
+    Y
+    |
+    +---X
+
+    1---4---7---
+    | 1 | 3 |
+    2---5---8---
+    | 2 | 4 |
+    3---6---9---
+    |   |   |
+
+    EXAMPLES:
+        >>> _node_nums_2d(2, 2, 4)
+        array([5, 6, 8, 9])
+
+    """
+    if en > nelx * nely:
+        raise Exception('Mesh does not contain specified element number.')
+    inn = asarray([0, 1, nely + 1, nely + 2]) #  initial node numbers
+    nn = inn + (en + (en - 1) // nely) #  the element's node numbers
+    return nn
+
+def node_nums_3d(nelx, nely, nelz, en):
+    """
+    Return the node numbers of an element in 3D space as an array given the
+    domain's dimensions and the element's number (en). Numbering starts at one,
+    then columnwise from top left corner in the negative y-axis direction
+    (z-axis points out of the screen). See 2-element example below:
+
+       Y
+       |
+       +---X
+      /
+     Z
+
+        1---3---5
+       /|  /|  /|
+      / 2-/-4-/-6
+     7-/-9-/-11/
+     |/  |/  |/
+     8---10--12
+
+    EXAMPLES:
+        >>> node_nums_3d(4, 3, 2, 17)
+        array([26, 27, 30, 31, 46, 47, 50, 51])
+        >>> node_nums_3d(2,1,1,2)
+        array([ 3,  4,  5,  6,  9, 10, 11, 12])
+    """
+    xygridsize = nelx * nely
+    if en > nelx * nely * nelz:
+        raise Exception('Mesh does not contain specified element number.')
+    pen = en % (xygridsize) #  projected element number on rearmost face
+    if pen == 0:
+        pen = xygridsize
+
+    nnzero = node_nums_2d(nelx, nely, pen) #  node numbers at rearmost face
+    zinc = (en - 1) // xygridsize * (nelx + 1) * (nely + 1)
+    nnr = nnzero + zinc
+    nnf = nnr + (nelx + 1) * (nely + 1)
+    nn = hstack( (nnr, nnf) )
+    return nn
 
 # =====================================
 # === Private functions and helpers ===
@@ -331,11 +323,14 @@ def _change_fname(fd, kwargs):
     return filename
 
 def _write_geom(x, fname):
+    '''
+    Determines what geometry format (file type) to create.
+    '''
     if fname.endswith('vtk', -3):
         _write_legacy_vtu(x, fname)
     else:
         print 'Other file formats not implemented, only legacy VTK.'
-        #_write_vrml2(x, fname)
+        #_write_vrml2(x, fname) # future
 
 def _write_legacy_vtu(x, fname):
     """
