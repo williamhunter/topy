@@ -10,8 +10,8 @@ Please refer to the [ToPy Wiki](https://github.com/williamhunter/topy/wiki) for 
 ToPy was originally hosted on Google Code.
 
 ## Installation
-Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md))
-file all you need to do is the following:
+Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
+file) all you need to do is the following:
 
 ```bash
 $ git clone https://github.com/williamhunter/topy.git
@@ -29,14 +29,14 @@ yourself with this if you just want to get some results.
 
 ### There are two ways of defining a problem
 1. **TPD file**: You define the problem with keywords
-(see [Help](https://github.com/williamhunter/topy/wiki/Help)) in a simple text file and solve via the command line
+(see [Help](https://github.com/williamhunter/topy/wiki/Help)) in a simple text file and solve via the command line. The text file must have the extension `.tpd`
 2. **Config dictionary**: This is similar to the TPD file approach, however,
 you define the problem directly in a Python file; it's very useful if you want to
 experiment and don't want to keep making changes to a text file.
-You can later save the Config to a text file (a TPD file).
+You can later save the Config keywords to a TPD file.
 
 ### TPD (**T**oPy **P**roblem **D**efinition) file
-There is a minimal set of parameters, which is required for successful definition of a ToPy problem:
+There is a minimal set of parameters which is required for successful definition of a ToPy problem:
 ```
 PROB_TYPE  : comp
 PROB_NAME  : mbb_beam_minimal
@@ -57,7 +57,7 @@ LOAD_VALU_Y: -1
 ```
 You can read more about successful problem definition [here](https://github.com/williamhunter/topy/tree/master/templates).
 
-When the `.tpd` file is defined, then the rest is simple:
+When the TPD file is defined, then the rest is simple:
 
 ```python
 from topy import Topology
@@ -90,14 +90,14 @@ config = {
      'VOL_FRAC': 0.5
 }
 ```
-The requirements are the same as for `.tpd` file.
+The requirements are the same as for the TPD file.
 
 ```Python
 topology = Topology(config=config)
 ```
 ### Optimization (solving the problem)
 
-You can use the one-line solution:
+You can use the command line solution:
 
 ```bash
 $ python topy/scripts/optimise.py <filename>.tpd
@@ -115,7 +115,9 @@ topy.optimise(t)
 ```
 
 ### Visualization (seeing the result)
-Module `topy.visualization` allows one to save the output as a `.png` image for 2D problems or as a `.vtk` file for 3D. You can animate the obtained images with
+Module `topy.visualization` allows one to save the output as a `.png` image for 2D problems or as a `.vtk` file for 3D.
+The VTK files can be viewed with Mayavi or ParaView.
+You can animate the PNG images with
 the [convert](https://www.imagemagick.org/script/convert.php) tool.
 
 ```bash
@@ -131,7 +133,7 @@ convert -delay 35 *.png anim.gif
 ## Tutorials
 [Tutorials](https://github.com/williamhunter/topy/wiki/Tutorials)
 
-## Examples
+## Solved examples
 [Examples](https://github.com/williamhunter/topy/wiki/Examples)
 
 ## How to cite ToPy
