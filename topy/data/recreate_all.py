@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from os import system, name
+import logging
+logger = logging.getLogger(__name__)
 
 if name == 'posix':
     system('rm Q4.K')
@@ -19,20 +21,20 @@ elif name == 'win32':
     system('del H8T.K')
     system('del H18B.K')
 else:
-    print 'This may take a while, perhaps a few minutes...'
+    logger.info('This may take a while, perhaps a few minutes...')
     system('python Q4_K.py')
-    print '1 of 7 done!'
+    logger.info('1 of 7 done!')
     system('python Q4bar_K.py')
-    print '2 of 7 done!'
+    logger.info('2 of 7 done!')
     system('python Q4T_K.py')
-    print '3 of 7 done!'
+    logger.info('3 of 7 done!')
     system('python Q5B_K.py')
-    print '4 of 7 done! All 2D matrices created. Now 3D...'
+    logger.info('4 of 7 done! All 2D matrices created. Now 3D...')
     system('python H8_K.py')
-    print '5 of 7 done!'
+    logger.info('5 of 7 done!')
     system('python H8T_K.py')
-    print '6 of 7 done!'
+    logger.info('6 of 7 done!')
     system('python H18B_K.py')
-    print '7 of 7 done! All 3D matrices created. Finished.'
+    logger.info('7 of 7 done! All 3D matrices created. Finished.')
 
 # EOF recreate_all.py
