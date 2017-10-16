@@ -10,13 +10,15 @@
 """
 
 from __future__ import division
-
+import logging
 from os import path
 
 from numpy import array, linspace, unique, sqrt, round, load
 from numpy.linalg import eigvalsh
 
 from .data.matlcons import _a, _nu, _E
+
+logger = logging.getLogger(__name__)
 
 __all__ = ['Q4', 'Q5B',  'Q4a5B',  'Q4T',\
            'H8', 'H18B', 'H8T']
@@ -41,9 +43,9 @@ fname = path.join(pth, 'Q4bar.K')
 try:
     Q4bar = load(fname)
 except IOError:
-    print 'It seems as though all or some of the element stiffness matrices'
-    print 'do not exist. Creating them...'
-    print 'This is usually only required once and may take a few minutes.'
+    logger.info('It seems as though all or some of the element stiffness matrices')
+    logger.info('do not exist. Creating them...')
+    logger.info('This is usually only required once and may take a few minutes.')
     from topy.data import Q4bar_K
     Q4bar = load(fname)
 

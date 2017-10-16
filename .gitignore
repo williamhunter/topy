@@ -24,6 +24,8 @@ var/
 .installed.cfg
 *.egg
 
+.ipynb_checkpoints/
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -70,6 +72,7 @@ images/
 notes/
 old/
 testing/
+iterations/
 tutorial/
 *.K
 examples/*/*.png

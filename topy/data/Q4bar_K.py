@@ -20,13 +20,14 @@ from sympy import symbols, Matrix, diff, integrate, zeros
 from numpy import abs, array
 
 from matlcons import *
-
+import logging
+logger = logging.getLogger(__name__)
 # Get file name:
 fname = __file__.split('_')[0] + '.K'
 
 try:
     f = open(fname)
-    print fname ,'(stiffness matrix) exists!'
+    logger.info('{} (stiffness matrix) exists!'.format(fname))
     f.close()
 except IOError:
     # SymPy symbols:
@@ -70,7 +71,7 @@ except IOError:
     dKbar = Bbar.T * Bbar #  a matrix of constants, i.e., no x or y vals
 
     # Integration:
-    print 'SymPy is integrating: K for Q4bar...'
+    logger.info('SymPy is integrating: K for Q4bar...')
     Kbar = dKbar.integrate((x, -a, a),(y, -b, b))
 
     # Convert SymPy Matrix to NumPy array:
@@ -81,6 +82,6 @@ except IOError:
 
     # Create file:
     K.dump(fname)
-    print 'Created', fname, '(stiffness matrix).'
+    logger.info('Created ' + fname + ' (stiffness matrix).')
 
 # EOF Q4bar_K.py

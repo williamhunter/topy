@@ -14,6 +14,7 @@
 """
 
 from __future__ import division
+import logging
 
 from sympy import symbols, Matrix, diff, integrate, zeros
 
@@ -21,12 +22,13 @@ from numpy import abs, array
 
 from matlcons import *
 
+logger = logging.getLogger(__name__)
 # Get file name:
 fname = __file__.split('_')[0] + '.K'
 
 try:
     f = open(fname)
-    print fname ,'(stiffness matrix) exists!'
+    logger.info('{} (stiffness matrix) exists!'.format(fname))
     f.close()
 except IOError:
     # SymPy symbols:
@@ -78,7 +80,7 @@ except IOError:
     dK = B.T * C * B
 
     # Integration:
-    print 'SymPy is integrating: K for H8...'
+    logger.info('SymPy is integrating: K for H8...')
     K = dK.integrate((x, -a, a),(y, -b, b),(z, -c, c))
 
     # Convert SymPy Matrix to NumPy array:
@@ -89,6 +91,6 @@ except IOError:
 
     # Create file:
     K.dump(fname)
-    print 'Created', fname, '(stiffness matrix).'
+    logger.info('Created ' + fname + ' (stiffness matrix).')
 
 # EOF H8_K.py

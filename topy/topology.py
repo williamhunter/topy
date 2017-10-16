@@ -8,13 +8,14 @@
 # =============================================================================
 """
 from __future__ import division 
+import logging
 from string import lower
 import numpy as np
 import os
 from pysparse import superlu, itsolvers, precon
 from .parser import tpd_file2dict, config2dict
-from .topy_logging import Logger
 
+logger = logging.getLogger(__name__)
 
 __all__ = ['Topology']
 
@@ -104,7 +105,6 @@ class Topology:
         See also: load_tpd_file
 
         """
-        Logger.thin_line()
         # Set all the mandatory minimum amount of parameters that constitutes
         # a completely defined topology optimisation problem:
         if not self.topydict:
@@ -125,23 +125,23 @@ class Topology:
         self.Ke = self.topydict['ELEM_K'] #  Element stiffness matrix
         self.K = self.topydict['K'] #  Global stiffness matrix
         if self.nelz:
-            Logger.display('Domain discretisation (NUM_ELEM_X x NUM_ELEM_Y x ' + \
+            logger.info('Domain discretisation (NUM_ELEM_X x NUM_ELEM_Y x ' + \
                 'NUM_ELEM_Z) = %d x %d x %d' % (self.nelx, self.nely, self.nelz))
         else:
-            Logger.display( 'Domain discretisation (NUM_ELEM_X x NUM_ELEM_Y) = %d x %d'\
+            logger.info( 'Domain discretisation (NUM_ELEM_X x NUM_ELEM_Y) = %d x %d'\
                 % (self.nelx, self.nely))
 
-        Logger.display('Element type (ELEM_K) =', self.topydict['ELEM_TYPE'])
-        Logger.display('Filter radius (FILT_RAD) =', self.filtrad)
+        logger.info('Element type (ELEM_K) = {}'.format(self.topydict['ELEM_TYPE']))
+        logger.info('Filter radius (FILT_RAD) = {}'.format(self.filtrad))
 
         # Check for either one of the following two, will take NUM_ITER if both
         # are specified.
         try:
             self.numiter = self.topydict['NUM_ITER'] #  Number of iterations
-            Logger.display('Number of iterations (NUM_ITER) = %d' % (self.numiter))
+            logger.info('Number of iterations (NUM_ITER) = %d' % (self.numiter))
         except KeyError:
             self.chgstop = self.topydict['CHG_STOP'] #  Change stop criteria
-            Logger.display('Change stop value (CHG_STOP) = %.3e (%.2f%%)' \
+            logger.info('Change stop value (CHG_STOP) = %.3e (%.2f%%)' \
                 % (self.chgstop, self.chgstop * 100))
             self.numiter = MAX_ITERS
 
@@ -181,8 +181,8 @@ class Topology:
 
         # Print this to screen, just so that the user knows what type of
         # problem is being solved:
-        Logger.display('Problem type (PROB_TYPE) = ' + self.probtype)
-        Logger.display('Problem name (PROB_NAME) = ' + self.probname)
+        logger.info('Problem type (PROB_TYPE) = ' + self.probtype)
+        logger.info('Problem name (PROB_NAME) = ' + self.probname)
 
         # Set extra parameters if specified:
         # (1) Continuation parameters for 'p':
@@ -208,29 +208,29 @@ class Topology:
                 #  Initial value of exponent for mech problems:
                 self.a = self.a * 7 / 3
             self.eta = 1 / (1 - self.a)
-            Logger.display('Damping factor (ETA) = exp')
+            logger.info('Damping factor (ETA) = exp')
         else:
             self.eta = float(self.topydict['ETA']) * np.ones(self.desvars.shape)
-            Logger.display('Damping factor (ETA) = %3.2f' % (self.eta.mean()))
+            logger.info('Damping factor (ETA) = %3.2f' % (self.eta.mean()))
 
         try:
             self.approx = lower(self.topydict['APPROX'])
         except KeyError:
             self.approx = None
         if self.approx == 'dquad':
-            Logger.display('Using diagonal quadratic approximation (APPROX = dquad)')
+            logger.info('Using diagonal quadratic approximation (APPROX = dquad)')
         # (5) Set passive elements:
         self.pasv = self.topydict['PASV_ELEM']
         if self.pasv.any():
-            Logger.display('Passive elements (PASV_ELEM) specified')
+            logger.info('Passive elements (PASV_ELEM) specified')
         else:
-            Logger.display('No passive elements (PASV_ELEM) specified')
+            logger.info('No passive elements (PASV_ELEM) specified')
         # (6) Set active elements:
         self.actv = self.topydict['ACTV_ELEM']
         if self.actv.any():
-            Logger.display('Active elements (ACTV_ELEM) specified')
+            logger.info('Active elements (ACTV_ELEM) specified')
         else:
-            Logger.display('No active elements (ACTV_ELEM) specified')
+            logger.info('No active elements (ACTV_ELEM) specified')
 
         # Set parameters for compliant mechanism synthesis, if they exist:
         if self.probtype == 'mech':
@@ -257,7 +257,6 @@ class Topology:
             else:
                 self.K.update_add_mask_sym([ksin], self.loaddof, maskin)
                 self.K.update_add_mask_sym([ksout], self.loaddofout, maskout)
-        Logger.thick_line()
 
     def fea(self):
         """
@@ -292,21 +291,21 @@ class Topology:
             (info, numitr, relerr) = \
             itsolvers.pcg(Kfree, self.rfree, self.dfree, 1e-8, 8000, preK)
             if info < 0:
-                Logger.display('PySparse error: Type:', info,', at', numitr, \
-                    'iterations.')
+                logger.error('PySparse error: Type: {}, '
+                             'at {} iterations'.format(info, numitr))
                 raise Exception('Solution for FEA did not converge.')
             else:
-                Logger.display('ToPy: Solution for FEA converged after', numitr, \
-                    'iterations.')
+                logger.debug('ToPy: Solution for FEA converged after '
+                             '{} iterations'.format(numitr))
             if self.probtype == 'mech':  # mechanism synthesis
                 (info, numitr, relerr) = \
                 itsolvers.pcg(Kfree, self.rfreeout, self.dfreeout, 1e-8, \
                     8000, preK)
                 if info < 0:
-                    Logger.display('PySparse error: Type:', info,', at', numitr, \
-                        'iterations.')
-                    raise Exception('Solution for FEA of adjoint load case \
-                        did not converge.')
+                    logger.error('PySparse error: Type: {}, '
+                                 'at {} iterations'.format(info, numitr))
+                    raise Exception('Solution for FEA of adjoint load '
+                                    'case did not converge.')
 
         # Update displacement vectors:
         self.d[self.freedof] = self.dfree

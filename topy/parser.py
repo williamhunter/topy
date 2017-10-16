@@ -6,13 +6,14 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
-
+import logging
 from string import lower
 import numpy as np
 from pysparse import spmatrix
 
 from .elements import *
-from .topy_logging import Logger
+
+logger = logging.getLogger(__name__)
 
 
 # ========================
@@ -47,9 +48,8 @@ def tpd_file2dict(fname):
         raise Exception('Input file or format not recognised')
     elif s.startswith('[ToPy Problem Definition File v2007]') == True:
         d = _parsev2007file(s)
-        Logger.thick_line()
-        Logger.display('ToPy problem definition (TPD) file successfully parsed.')
-        Logger.display("TPD file name:", fname, "(v2007)")
+        logger.info('ToPy problem definition (TPD) file successfully parsed.')
+        logger.info('TPD file name: {} (v2007)\n'.format(fname))
     # Very basic parameter checking, exit on error:
     _checkparams(d)
     # Future file versions, enter <if> and <elif> as per above and define new
@@ -78,7 +78,6 @@ def config2dict(config):
     """
 
     d = _parse_dict(config)
-    Logger.thick_line()
     # Very basic parameter checking, exit on error:
     _checkparams(d)
     # See method below...
@@ -346,10 +345,10 @@ def _checkparams(d):
     # Check for rigid body motion and warn user:
     if d['DOF_PN'] == 2:
         if not d.has_key('FXTR_NODE_X') or not d.has_key('FXTR_NODE_Y'):
-            Logger.display('\n\tToPy warning: Rigid body motion in 2D is possible!\n')
+            logger.info('\n\tToPy warning: Rigid body motion in 2D is possible!\n')
     if d['DOF_PN'] == 3:
         if not d.has_key('FXTR_NODE_X') or not d.has_key('FXTR_NODE_Y')\
         or not d.has_key('FXTR_NODE_Z'):
-            Logger.display('\n\tToPy warning: Rigid body motion in 3D is possible!\n')
+            logger.info('\n\tToPy warning: Rigid body motion in 3D is possible!\n')
 
 # EOF parser.py

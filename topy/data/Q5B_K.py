@@ -20,13 +20,14 @@ from sympy import symbols, Matrix, diff, integrate, zeros, eye
 from numpy import abs, array
 
 from matlcons import *
-
+import logging
+logger = logging.getLogger(__name__)
 # Get file name:
 fname = __file__.split('_')[0] + '.K'
 
 try:
     f = open(fname)
-    print fname ,'(stiffness matrix) exists!'
+    logger.info('{} (stiffness matrix) exists!'.format(fname))
     f.close()
 except IOError:
     # SymPy symbols:
@@ -63,7 +64,7 @@ except IOError:
     dH = tP * C.inv() * P
 
     # Integration:
-    print 'SymPy is integrating: K for Q5B...'
+    logger.info('SymPy is integrating: K for Q5B...')
     J = dJ.integrate((x, -a, a),(y, -b, b))
     H = dH.integrate((x, -a, a),(y, -b, b))
 
@@ -78,6 +79,6 @@ except IOError:
 
     # Create file:
     K.dump(fname)
-    print 'Created', fname, '(stiffness matrix).'
+    logger.info('Created ' + fname + ' (stiffness matrix).')
 
 # EOF Q5B_K.py
