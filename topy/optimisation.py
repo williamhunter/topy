@@ -76,6 +76,7 @@ def optimise(topology, save=True, dir='./iterations'):
     logger.info('\nSolid plus void to total elements fraction = %3.5f' %\
         (topology.svtfrac))
     # Print iteration info:
+
     logger.info('%d iterations took %3.3f minutes (%3.3f seconds/iteration)'\
         %(topology.itercount, (te - ti) / 60, (te - ti) / topology.itercount))
     logger.info('Average of all ETA\'s = %3.3f (average of all a\'s = %3.3f)' \
