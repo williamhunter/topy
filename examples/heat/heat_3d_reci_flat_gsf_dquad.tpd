@@ -1,0 +1,39 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+
+# 3D analogy of 'Classic' 40x40 2d plate, here a flat solid.
+
+PROB_TYPE  : heat
+PROB_NAME  : heat_3d_flat_gsf_dquad
+ETA        : 0.4
+DOF_PN     : 1
+VOL_FRAC   : 0.3
+FILT_RAD   : 1.2
+P_FAC      : 3
+ELEM_K     : H8T
+NUM_ELEM_X : 40
+NUM_ELEM_Y : 40
+NUM_ELEM_Z : 1
+
+FXTR_NODE_X: 19|23; 1700|1704
+LOAD_NODE_X: 1|3362
+LOAD_VALU_X: 0.01@3362
+
+NUM_ITER   : 100
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 10  # num of iters to hold p constant from start
+P_INCR     : 1  # increment by this amount
+P_CON      : 10  # increment every 'P_CON' iters
+P_MAX      : 3  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 20  # num of iters to hold q constant from start
+Q_INCR     : 0.0075  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 3  # max value of 'Q_CON'
+
+# Diagonal quadratic approximation
+APPROX     : dquad

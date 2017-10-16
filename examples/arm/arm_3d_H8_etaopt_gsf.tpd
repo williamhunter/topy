@@ -1,0 +1,37 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+
+PROB_TYPE  : comp
+PROB_NAME  : arm_3d_H8_etaopt_gsf
+ETA        : 0.4  # 'optimal' choice for eta
+DOF_PN     : 3
+VOL_FRAC   : 0.2
+FILT_RAD   : 1.8
+ELEM_K     : H8  # 'normal' bi-linear element
+NUM_ELEM_X : 40
+NUM_ELEM_Y : 40
+NUM_ELEM_Z : 40
+FXTR_NODE_X: 21|67261|1681
+FXTR_NODE_Y: 21|67261|1681; 62|67302|1681; 103|67343|1681
+FXTR_NODE_Z: 21; 62; 103
+LOAD_NODE_Y: 1661
+LOAD_VALU_Y: -1
+
+NUM_ITER   : 50
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 15  # num of iters to hold p constant from start
+P_INCR     : 0.2  # increment by this amount
+P_CON      : 1  # increment every 'P_CON' iters
+P_MAX      : 3  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 15  # num of iters to hold q constant from start
+Q_INCR     : 0.05  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 5  # max value of 'Q_CON'
+
+# Attachment bar for arm
+ACTV_ELEM: 20|62420|1600; 21|62421|1600; 60|62460|1600; 61|62461|1600

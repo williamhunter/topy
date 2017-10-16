@@ -1,0 +1,28 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+# This file contains a minimum amount of 'parseable' keywords.
+
+# If you don't have at least these, ToPy will complain and won't run.
+PROB_TYPE  : comp #  minimum compliance problem
+PROB_NAME  : mbb_beam_minimal
+ETA        : 0.5 #  Or use 'exp' (without quotes)
+DOF_PN     : 2
+VOL_FRAC   : 0.5
+FILT_RAD   : 1.5
+P_FAC      : 3
+ELEM_K     : Q4
+NUM_ELEM_X : 60
+NUM_ELEM_Y : 20
+NUM_ELEM_Z : 0
+# Stop after so many iterations:
+NUM_ITER   : 10 #  94 gives same result as Sigmund's top(60,20,0.5,3.0,1.5)
+# If you'd rather use a stop criteria:
+#CHG_STOP   : 0.01 #  gives same result as Sigmund's top(60,20,0.5,3.0,1.5)
+
+# These keywords can of course be different, but you obviously need to
+constrain and load the domain in some way...
+FXTR_NODE_X: 1|21 #  nodes 1 to 21, LHS of domain
+FXTR_NODE_Y: 1281 #  (NUM_ELEM_X + 1) * (NUM_ELEM_Y + 1)
+LOAD_NODE_Y: 1
+LOAD_VALU_Y: -1

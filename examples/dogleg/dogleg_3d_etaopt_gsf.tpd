@@ -1,0 +1,37 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+# Based on example in Sigmund and Bendsoe, p26, but now with GSF.
+
+PROB_TYPE  : comp
+PROB_NAME  : dogleg_3d_etaopt_gsf
+ETA        : 0.4
+DOF_PN     : 3
+VOL_FRAC   : 0.3
+FILT_RAD   : 1.8
+ELEM_K     : H8
+NUM_ELEM_X : 60
+NUM_ELEM_Y : 30
+NUM_ELEM_Z : 60
+FXTR_NODE_X: 931|1861|31; 961|1891|31; 931|961; 1861|1891
+FXTR_NODE_Y: 931|1861|31; 961|1891|31; 931|961; 1861|1891
+FXTR_NODE_Z: 931|1861|31; 961|1891|31; 931|961; 1861|1891
+LOAD_NODE_Y: 113475|113477; 113506|113508; 113537|113539
+LOAD_VALU_Y: -1@9
+
+PASV_ELEM  : 1|900; 1801|2700; 3601|4500; 5401|6300; 7201|8100; 9001|9900; 10801|11700; 12601|13500; 14401|15300; 16201|17100; 18001|18900; 19801|20700; 21601|22500; 23401|24300; 25201|26100; 27001|27900; 28801|29700; 30601|31500; 32401|33300; 34201|35100; 36001|36900; 37801|38700; 39601|40500; 41401|42300; 43201|44100; 45001|45900; 46801|47700; 48601|49500; 50401|51300; 52201|53100
+
+NUM_ITER   : 50
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 15  # num of iters to hold p constant from start
+P_INCR     : 0.2  # increment by this amount
+P_CON      : 1  # increment every 'P_CON' iters
+P_MAX      : 3  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 15  # num of iters to hold q constant from start
+Q_INCR     : 0.05  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 5  # max value of 'Q_CON'

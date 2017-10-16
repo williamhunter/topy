@@ -1,0 +1,39 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+# 3d cube domain, heat sink on middle of one face,
+# nodes have thermal load.
+
+PROB_TYPE  : heat
+PROB_NAME  : heat_3d_etaopt_gsf_dquad
+ETA        : 0.4  # 'optimal' choice for eta
+DOF_PN     : 1
+VOL_FRAC   : 0.3
+FILT_RAD   : 1.4
+ELEM_K     : H8T  # use 'thermal' element
+NUM_ELEM_X : 50
+NUM_ELEM_Y : 5
+NUM_ELEM_Z : 50
+
+# Use only X for heat problems!
+FXTR_NODE_X: 139|168
+LOAD_NODE_X: 1|15606
+LOAD_VALU_X: 0.01@15606
+
+NUM_ITER   : 100
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 10  # num of iters to hold p constant from start
+P_INCR     : 1  # increment by this amount
+P_CON      : 10  # increment every 'P_CON' iters
+P_MAX      : 3  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 20  # num of iters to hold q constant from start
+Q_INCR     : 0.0075  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 3  # max value of 'Q_CON'
+
+# Diagonal quadratic approximation
+APPROX     : dquad

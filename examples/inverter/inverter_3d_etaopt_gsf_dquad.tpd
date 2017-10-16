@@ -1,0 +1,45 @@
+[ToPy Problem Definition File v2007]
+
+# Author: William Hunter
+# 3D inverter
+
+PROB_TYPE  : mech
+PROB_NAME  : inverter_3d_etaopt_gsf_dquad
+ETA        : 0.4
+DOF_PN     : 3
+VOL_FRAC   : 0.15
+FILT_RAD   : 1.4
+ELEM_K     : H8
+NUM_ELEM_X : 80
+NUM_ELEM_Y : 40
+NUM_ELEM_Z : 20
+FXTR_NODE_X: 66460; 66461
+FXTR_NODE_Y: 1|69701|41; 66460; 66461
+FXTR_NODE_Z: 1|3321; 66460; 66461
+
+LOAD_NODE_X: 1
+LOAD_VALU_X: 1
+
+LOAD_NODE_X_OUT: 3281
+LOAD_VALU_X_OUT: -1
+
+NUM_ITER   : 150
+
+# Grey-scale filter (GSF)
+P_FAC      : 1
+P_HOLD     : 15  # num of iters to hold p constant from start
+P_INCR     : 1  # increment by this amount
+P_CON      : 15  # increment every 'P_CON' iters
+P_MAX      : 4  # max value of 'P_CON'
+
+Q_FAC      : 1
+Q_HOLD     : 30  # num of iters to hold q constant from start
+Q_INCR     : 0.01  # increment by this amount
+Q_CON      : 1  # increment every 'Q_CON' iters
+Q_MAX      : 3  # max value of 'Q_CON'
+
+# Diagonal quadratic approximation
+APPROX     : dquad
+
+
+
