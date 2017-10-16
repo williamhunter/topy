@@ -7,8 +7,8 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
+from __future__ import division
 import logging
-from __future__ import division 
 from string import lower
 import numpy as np
 import os
