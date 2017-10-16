@@ -15,6 +15,7 @@
 
 from __future__ import division
 import logging
+import os
 from sympy import symbols, Matrix, diff, integrate, zeros, eye
 
 from numpy import abs, array, transpose, dot
@@ -26,11 +27,9 @@ logger = logging.getLogger(__name__)
 # Get file name:
 fname = __file__.split('_')[0] + '.K'
 
-try:
-    f = open(fname)
+if os.path.exists(fname):
     logger.info('{} (stiffness matrix) exists!'.format(fname))
-    f.close()
-except IOError:
+else:
     # SymPy symbols:
     a, b, c, x, y, z = symbols('a b c x y z')
     N1, N2, N3, N4 = symbols('N1 N2 N3 N4')
