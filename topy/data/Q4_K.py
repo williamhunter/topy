@@ -14,7 +14,7 @@
 """
 
 from __future__ import division
-
+import os
 from sympy import symbols, Matrix, diff, integrate, zeros
 
 from numpy import abs, array
@@ -25,11 +25,9 @@ logger = logging.getLogger(__name__)
 # Get file name:
 fname = __file__.split('_')[0] + '.K'
 
-try:
-    f = open(fname)
+if os.path.exists(fname):
     logger.info('{} (stiffness matrix) exists!'.format(fname))
-    f.close()
-except IOError:
+else:
     # SymPy symbols:
     a, b, x, y = symbols('a b x y')
     E, nu = symbols('E nu')
