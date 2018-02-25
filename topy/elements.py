@@ -13,15 +13,13 @@ from __future__ import division
 import logging
 from os import path
 
-from numpy import array, linspace, unique, sqrt, round, load
-from numpy.linalg import eigvalsh
+from numpy import load
 
 from .data.matlcons import _a, _nu, _E
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['Q4', 'Q5B',  'Q4a5B',  'Q4T',\
-           'H8', 'H18B', 'H8T']
+__all__ = ['Q4', 'Q5B', 'Q4a5B', 'Q4T', 'H8', 'H18B', 'H8T']
 
 # ===================================================
 # === Messages used for errors, information, etc. ===
@@ -46,7 +44,6 @@ except IOError:
     logger.info('It seems as though all or some of the element stiffness matrices')
     logger.info('do not exist. Creating them...')
     logger.info('This is usually only required once and may take a few minutes.')
-    from topy.data import Q4bar_K
     Q4bar = load(fname)
 
 # ==========================================================================
@@ -56,7 +53,6 @@ fname = path.join(pth, 'Q4.K')
 try:
     Q4 = load(fname)
 except IOError:
-    from topy.data import Q4_K
     Q4 = load(fname)
 
 # =========================================================================
@@ -66,7 +62,6 @@ fname = path.join(pth, 'Q5B.K')
 try:
     Q5B = load(fname)
 except IOError:
-    from topy.data import Q5B_K
     Q5B = load(fname)
 
 # =========================================================
@@ -76,7 +71,6 @@ fname = path.join(pth, 'Q4T.K')
 try:
     Q4T = load(fname)
 except IOError:
-    from topy.data import Q4T_K
     Q4T = load(fname)
 
 # ===========================================================
@@ -88,8 +82,7 @@ except IOError:
 # of characteristic equations of the elemental stiffness matrix is needed.
 # Element thickness set = 1. See De Klerk and Groenwold for details.
 # Symbolic value of alpha_opt for bending:
-alpha2D = (2 * _a**2 * (1 - _nu) * (2 * _nu**2 - _nu + 1)) \
-/ (3 * (_nu + 1) * _E**2)
+alpha2D = (2 * _a**2 * (1 - _nu) * (2 * _nu**2 - _nu + 1)) / (3 * (_nu + 1) * _E**2)
 Q4a5B = Q4 - alpha2D * _E * Q4bar  # stiffness matrix
 
 # 3D elements
@@ -101,7 +94,6 @@ fname = path.join(pth, 'H8.K')
 try:
     H8 = load(fname)
 except IOError:
-    from topy.data import H8_K
     H8 = load(fname)
 
 # ============================================================
@@ -111,7 +103,6 @@ fname = path.join(pth, 'H18B.K')
 try:
     H18B = load(fname)
 except IOError:
-    from topy.data import H18B_K
     H18B = load(fname)
 
 # ==========================================================================
@@ -122,7 +113,6 @@ fname = path.join(pth, 'H8T.K')
 try:
     H8T = load(fname)
 except IOError:
-    from topy.data import H8T_K
     H8T = load(fname)
 
 # EOF elements.py
