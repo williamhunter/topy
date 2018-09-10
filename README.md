@@ -134,7 +134,7 @@ convert -delay 35 *.png anim.gif
 [Tutorials](https://github.com/williamhunter/topy/wiki/Tutorials)
 
 ## Solved examples
-[Examples](https://github.com/williamhunter/topy/wiki/Examples)
+[Examples-of-ToPy-results](https://github.com/williamhunter/ToPy/wiki/Examples-of-ToPy-results)
 
 ## How to cite ToPy
 If you've used ToPy in your research work, please consider to cite:
