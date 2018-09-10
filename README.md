@@ -13,14 +13,14 @@ ToPy was originally hosted on Google Code.
 Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
 file) all you need to do is the following:
 
+Download the latest stable release from here: https://github.com/williamhunter/topy/releases/tag/v0.4.0
+
+Then do
+
 ```bash
-$ git clone https://github.com/williamhunter/topy.git
 $ cd topy/topy
 $ python setup.py install
 ```
-
-Alternatively, you can download the latest stable release, but it usually lags
-a little behind the Master branch (as can be expected).
 
 ## Getting started
 The main class of **ToPy** is 'Topology'. It defines the main constraints,
