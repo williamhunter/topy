@@ -7,8 +7,6 @@ ToPy is a lightweight topology optimization framework for Python that can solve
 compliance (stiffness), mechanism synthesis and heat conduction problems in 2D and 3D.
 Please refer to the [ToPy Wiki](https://github.com/williamhunter/topy/wiki) for further information.
 
-ToPy was originally hosted on Google Code.
-
 ## Installation
 Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
 file) all you need to do is the following:
