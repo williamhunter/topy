@@ -1,6 +1,6 @@
 # ToPy
 <div align="center">
-	<img src="./imgsrc/ToPy_logo.png">
+	<img src="./imgsrc/ToPy_logo3d.png">
 </div>
 
 ToPy is a lightweight topology optimization framework for Python that can solve
