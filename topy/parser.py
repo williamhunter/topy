@@ -11,6 +11,7 @@ from string import lower
 import numpy as np
 from pysparse import spmatrix
 
+from .elements import *
 
 logger = logging.getLogger(__name__)
 
