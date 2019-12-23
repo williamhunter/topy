@@ -96,7 +96,7 @@ def _parsev2007file(s):
     snew = [line.split('#')[0] for line in snew]  # Get rid of all comments
     snew = [line.replace('\t', '') for line in snew]
     snew = [line.replace(' ', '') for line in snew]
-    snew = filter(len, snew)
+    snew = list(filter(len, snew))
 
     d = dict([line.split(':') for line in snew])
     return _parse_dict(d)
@@ -346,8 +346,8 @@ def _checkparams(d):
         raise ValueError('No load(s) or no loaded node(s) specified.')
     # Check for rigid body motion and warn user:
     if d['DOF_PN'] == 2:
-        if not d.has_key('FXTR_NODE_X') or not d.has_key('FXTR_NODE_Y'):
+        if 'FXTR_NODE_X' not in d or 'FXTR_NODE_Y' not in d:
             logger.info('\n\tToPy warning: Rigid body motion in 2D is possible!\n')
     if d['DOF_PN'] == 3:
-        if not d.has_key('FXTR_NODE_X') or not d.has_key('FXTR_NODE_Y') or not d.has_key('FXTR_NODE_Z'):
+        if 'FXTR_NODE_X' not in d or 'FXTR_NODE_Y' not in d or 'FXTR_NODE_Z' not in d:
             logger.info('\n\tToPy warning: Rigid body motion in 3D is possible!\n')
