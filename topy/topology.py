@@ -7,9 +7,8 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
-from __future__ import division
+
 import logging
-from string import lower
 import numpy as np
 from pysparse import superlu, itsolvers, precon
 from .parser import tpd_file2dict, config2dict
@@ -210,7 +209,7 @@ class Topology:
             logger.info('Damping factor (ETA) = %3.2f' % (self.eta.mean()))
 
         try:
-            self.approx = lower(self.topydict['APPROX'])
+            self.approx = self.topydict['APPROX'].lower()
         except KeyError:
             self.approx = None
         if self.approx == 'dquad':
@@ -323,10 +322,10 @@ class Topology:
         rmin = int(np.floor(self.filtrad))
         if self.nelz == 0:
             U, V = np.indices((self.nelx, self.nely))
-            for i in xrange(self.nelx):
+            for i in range(self.nelx):
                 umin = np.maximum(i - rmin - 1, 0)
                 umax = np.minimum(i + rmin + 2, self.nelx + 1)
-                for j in xrange(self.nely):
+                for j in range(self.nely):
                     vmin = np.maximum(j - rmin - 1, 0)
                     vmax = np.minimum(j + rmin + 2, self.nely + 1)
                     u = U[umin: umax, vmin: vmax]
@@ -338,11 +337,11 @@ class Topology:
         else:
             rmin3 = rmin
             U, V, W = np.indices((self.nelx, self.nely, self.nelz))
-            for i in xrange(self.nelx):
+            for i in range(self.nelx):
                 umin, umax = np.maximum(i - rmin - 1, 0), np.minimum(i + rmin + 2, self.nelx + 1)
-                for j in xrange(self.nely):
+                for j in range(self.nely):
                     vmin, vmax = np.maximum(j - rmin - 1, 0), np.minimum(j + rmin + 2, self.nely + 1)
-                    for k in xrange(self.nelz):
+                    for k in range(self.nelz):
                         wmin, wmax = np.maximum(k - rmin3 - 1, 0), np.minimum(k + rmin3 + 2, self.nelz + 1)
                         u = U[umin:umax, vmin:vmax, wmin:wmax]
                         v = V[umin:umax, vmin:vmax, wmin:wmax]
@@ -558,8 +557,8 @@ class Topology:
 
         """
         if self.nelz == 0:  # 2D problem
-            for elx in xrange(self.nelx):
-                for ely in xrange(self.nely):
+            for elx in range(self.nelx):
+                for ely in range(self.nely):
                     e2sdofmap = self.e2sdofmapi + self.dofpn * (ely + elx * (self.nely + 1))
                     if self.probtype == 'comp' or self.probtype == 'mech':
                         updatedKe = self.desvars[ely, elx] ** self.p * self.Ke
@@ -568,9 +567,9 @@ class Topology:
                     mask = np.ones(e2sdofmap.size, dtype=int)
                     K.update_add_mask_sym(updatedKe, e2sdofmap, mask)
         else:  # 3D problem
-            for elz in xrange(self.nelz):
-                for elx in xrange(self.nelx):
-                    for ely in xrange(self.nely):
+            for elz in range(self.nelz):
+                for elx in range(self.nelx):
+                    for ely in range(self.nely):
                         e2sdofmap = self.e2sdofmapi + self.dofpn * (ely + elx * (self.nely + 1) + elz * (self.nelx + 1) * (self.nely + 1))
                         if self.probtype == 'comp' or self.probtype == 'mech':
                             updatedKe = self.desvars[elz, ely, elx] ** self.p * self.Ke

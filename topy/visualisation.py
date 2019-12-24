@@ -7,7 +7,7 @@
 # =============================================================================
 """
 
-from __future__ import division
+
 
 import sys
 from datetime import datetime
@@ -55,7 +55,7 @@ def create_2d_imag(x, **kwargs):
     # ====================================
     # x = flipud(x) #  Check your matplotlibrc file; might plot upside-down...
     figure()  # open a figure
-    if kwargs.has_key('title'):
+    if 'title' in kwargs:
         title(kwargs['title'])
         imshow(-x, cmap=cm.gray, aspect='equal', interpolation='nearest')
     imshow(-x, cmap=cm.gray, aspect='equal', interpolation='nearest')
@@ -67,7 +67,7 @@ def create_2d_imag(x, **kwargs):
     # Set the filename component defaults:
     keys = ['dflt_prefix', 'dflt_iternum', 'dflt_timestamp', 'dflt_filetype']
     values = ['topy_2d', 'nin', '_' + _timestamp(), 'png']
-    fname_dict = dict(zip(keys, values))
+    fname_dict = dict(list(zip(keys, values)))
     # Change the default filename based on keyword arguments, if necessary:
     fname = _change_fname(fname_dict, kwargs)
     # Save the domain as image:
@@ -110,7 +110,7 @@ def create_3d_geom(x, **kwargs):
     # Set the filename component defaults:
     keys = ['dflt_prefix', 'dflt_iternum', 'dflt_timestamp', 'dflt_filetype']
     values = ['topy_3d', 'nin', '_' + _timestamp(), 'vtk']
-    fname_dict = dict(zip(keys, values))
+    fname_dict = dict(list(zip(keys, values)))
     # Change the default filename based on keyword arguments, if necessary:
     fname = _change_fname(fname_dict, kwargs)
     # Save the domain as geometry:
@@ -310,17 +310,17 @@ def _change_fname(fd, kwargs):
     filename = fd['dflt_prefix'] + '_' + fd['dflt_iternum'] + fd['dflt_timestamp'] + '.' + fd['dflt_filetype']
 
     # This is not pretty but it works...
-    if kwargs.has_key('prefix'):
+    if 'prefix' in kwargs:
         filename = filename.replace(fd['dflt_prefix'], kwargs['prefix'])
-    if kwargs.has_key('iternum'):
+    if 'iternum' in kwargs:
         fixed_iternum = _fixiternum(str(kwargs['iternum']))
         filename = filename.replace(fd['dflt_iternum'], fixed_iternum)
-    if kwargs.has_key('filetype'):
+    if 'filetype' in kwargs:
         ftype = kwargs['filetype']
         filename = filename.replace(fd['dflt_filetype'], ftype)
-    if kwargs.has_key('time'):
+    if 'time' in kwargs:
         filename = filename.replace(fd['dflt_timestamp'], '')
-    if kwargs.has_key('dir'):
+    if 'dir' in kwargs:
         dir = kwargs['dir']
         if not dir[-1] == '/':
             dir = dir + '/'
@@ -336,7 +336,7 @@ def _write_geom(x, fname):
     if fname.endswith('vtk', -3):
         _write_legacy_vtu(x, fname)
     else:
-        print 'Other file formats not implemented, only legacy VTK.'
+        print('Other file formats not implemented, only legacy VTK.')
         #_write_vrml2(x, fname) # future
 
 
@@ -370,9 +370,9 @@ def _write_legacy_vtu(x, fname):
     except ValueError:
         sys.exit('Array dimensions not equal to 3, possibly 2-dimensional.\n')
 
-    for i in xrange(depth):
-        for j in xrange(rows):
-            for k in xrange(columns):
+    for i in range(depth):
+        for j in range(rows):
+            for k in range(columns):
                 if x[i, j, k] > THRESHOLD:
                     xculled.append(x[i, j, k])
                     points += (voxel_local_points + [i, j, k]).tolist()
