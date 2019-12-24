@@ -8,10 +8,10 @@ compliance (stiffness), mechanism synthesis and heat conduction problems in 2D a
 Please refer to the [ToPy Wiki](https://github.com/williamhunter/topy/wiki) for further information.
 
 ## Installation
-Once you've downloaded the dependancies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
+Once you've downloaded the dependencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
 file) all you need to do is the following:
 
-Download the latest stable release from here: https://github.com/williamhunter/topy/releases/tag/v0.4.0
+Download the latest **stable release** from here: https://github.com/williamhunter/topy/releases/tag/v0.4.0
 
 Then do
 
@@ -19,6 +19,11 @@ Then do
 $ cd topy/topy
 $ python setup.py install
 ```
+
+### ToPy and Python 3
+ToPy is fairly old. I started working on it in 2005 and finished it around 2009, so that implies that the stable release only 
+works with Python 2. You can however pull the latest "unstable" version, which should work with Python 3 (thanks to the
+efforts of other people).
 
 ## Getting started
 The main class of **ToPy** is 'Topology'. It defines the main constraints,
