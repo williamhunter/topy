@@ -8,7 +8,7 @@ compliance (stiffness), mechanism synthesis and heat conduction problems in 2D a
 Please refer to the [ToPy Wiki](https://github.com/williamhunter/topy/wiki) for further information.
 
 ## Installation
-Once you've downloaded the depenencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
+Once you've downloaded the dependancies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
 file) all you need to do is the following:
 
 Download the latest stable release from here: https://github.com/williamhunter/topy/releases/tag/v0.4.0
