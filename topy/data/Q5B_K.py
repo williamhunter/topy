@@ -12,16 +12,17 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
-
 from __future__ import division
-import os
-from sympy import symbols, Matrix, diff, integrate, zeros, eye
 
+import os
+
+from sympy import symbols, Matrix, diff, integrate, zeros, eye
 from numpy import abs, array
 
-from matlcons import *
-import logging
-logger = logging.getLogger(__name__)
+from ..utils import get_logger
+from .matlcons import *
+
+logger = get_logger(__name__)
 # Get file name:
 fname = __file__.split('_')[0] + '.K'
 
@@ -43,9 +44,9 @@ else:
     N4 = (a - x) * (b + y) / (4 * a * b)
 
     # Create strain-displacement matrix B:
-    B0 = map(diff, [N1, 0, N2, 0, N3, 0, N4, 0], xlist)
-    B1 = map(diff, [0, N1, 0, N2, 0, N3, 0, N4], ylist)
-    B2 = map(diff, [N1, N1, N2, N2, N3, N3, N4, N4], yxlist)
+    B0 = tuple(map(diff, [N1, 0, N2, 0, N3, 0, N4, 0], xlist))
+    B1 = tuple(map(diff, [0, N1, 0, N2, 0, N3, 0, N4], ylist))
+    B2 = tuple(map(diff, [N1, N1, N2, N2, N3, N3, N4, N4], yxlist))
     B = Matrix([B0, B1, B2])
 
     # Create constitutive (material property) matrix for plane stress:

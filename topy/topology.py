@@ -7,14 +7,16 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
-import logging
-import numpy as np
 import os
+
+import numpy as np
 from pysparse import superlu, itsolvers, precon
+
+from .utils import get_logger
 from .parser import tpd_file2dict, config2dict
 
-logger = logging.getLogger(__name__)
-
+logger = get_logger(__name__)
+logger.info("Instantiated.")
 __all__ = ['Topology']
 
 
