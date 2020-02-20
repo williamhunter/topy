@@ -6,14 +6,14 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
-import logging
-from string import lower
+
 import numpy as np
 from pysparse import spmatrix
 
+from .utils import get_logger
 from .elements import *
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 # ========================
@@ -108,7 +108,7 @@ def _parse_dict(d):
        # Read/convert minimum required input and convert, else exit:
     d = d.copy()
     try:
-        d['PROB_TYPE'] = lower(d['PROB_TYPE'])
+        d['PROB_TYPE'] = d['PROB_TYPE'].lower()
         d['VOL_FRAC'] = float(d['VOL_FRAC'])
         d['FILT_RAD'] = float(d['FILT_RAD'])
         d['P_FAC'] = float(d['P_FAC'])
@@ -116,7 +116,7 @@ def _parse_dict(d):
         d['NUM_ELEM_Y'] = int(d['NUM_ELEM_Y'])
         d['NUM_ELEM_Z'] = int(d['NUM_ELEM_Z'])
         d['DOF_PN'] = int(d['DOF_PN'])
-        d['ETA'] = lower(str(d['ETA']))
+        d['ETA'] = str(d['ETA']).lower()
         d['ELEM_TYPE'] = d['ELEM_K']
         d['ELEM_K'] = eval(d['ELEM_TYPE'])
     except:
@@ -172,7 +172,7 @@ def _parse_dict(d):
 
     # Check if diagonal quadratic approximation is required:
     try:
-        d['APPROX'] = lower(d['APPROX'])
+        d['APPROX'] = d['APPROX'].lower()
     except KeyError:
         pass
 

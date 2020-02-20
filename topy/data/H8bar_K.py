@@ -12,16 +12,17 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
-
 from __future__ import division
-import logging
-import os
-from sympy import symbols, Matrix, diff, integrate, zeros
 
+import os
+
+from sympy import symbols, Matrix, diff, integrate, zeros
 from numpy import abs, array
 
-from matlcons import *
-logger = logging.getLogger(__name__)
+from ..utils import get_logger
+from .matlcons import *
+
+logger = get_logger(__name__)
 # Get file name:
 fname = __file__.split('_')[0] + '.K'
 
@@ -52,18 +53,18 @@ else:
     N8 = (a - x) * (b + y) * (c + z) / (8 * a * b * c)
 
     # Create strain-displacement matrix B:
-    B0 = map(diff, [N1, 0, 0, N2, 0, 0, N3, 0, 0, N4, 0, 0,\
-                    N5, 0, 0, N6, 0, 0, N7, 0, 0, N8, 0, 0], xlist)
-    B1 = map(diff, [0, N1, 0, 0, N2, 0, 0, N3, 0, 0, N4, 0,\
-                    0, N5, 0, 0, N6, 0, 0, N7, 0, 0, N8, 0], ylist)
-    B2 = map(diff, [0, 0, N1, 0, 0, N2, 0, 0, N3, 0, 0, N4,\
-                    0, 0, N5, 0, 0, N6, 0, 0, N7, 0, 0, N8], zlist)
-    B3 = map(diff, [N1, N1, N1, N2, N2, N2, N3, N3, N3, N4, N4, N4,\
-                    N5, N5, N5, N6, N6, N6, N7, N7, N7, N8, N8, N8], yxlist)
-    B4 = map(diff, [N1, N1, N1, N2, N2, N2, N3, N3, N3, N4, N4, N4,\
-                    N5, N5, N5, N6, N6, N6, N7, N7, N7, N8, N8, N8], zylist)
-    B5 = map(diff, [N1, N1, N1, N2, N2, N2, N3, N3, N3, N4, N4, N4,\
-                    N5, N5, N5, N6, N6, N6, N7, N7, N7, N8, N8, N8], zxlist)
+    B0 = tuple(map(diff, [N1, 0, 0, N2, 0, 0, N3, 0, 0, N4, 0, 0,\
+                    N5, 0, 0, N6, 0, 0, N7, 0, 0, N8, 0, 0], xlist))
+    B1 = tuple(map(diff, [0, N1, 0, 0, N2, 0, 0, N3, 0, 0, N4, 0,\
+                    0, N5, 0, 0, N6, 0, 0, N7, 0, 0, N8, 0], ylist))
+    B2 = tuple(map(diff, [0, 0, N1, 0, 0, N2, 0, 0, N3, 0, 0, N4,\
+                    0, 0, N5, 0, 0, N6, 0, 0, N7, 0, 0, N8], zlist))
+    B3 = tuple(map(diff, [N1, N1, N1, N2, N2, N2, N3, N3, N3, N4, N4, N4,\
+                    N5, N5, N5, N6, N6, N6, N7, N7, N7, N8, N8, N8], yxlist))
+    B4 = tuple(map(diff, [N1, N1, N1, N2, N2, N2, N3, N3, N3, N4, N4, N4,\
+                    N5, N5, N5, N6, N6, N6, N7, N7, N7, N8, N8, N8], zylist))
+    B5 = tuple(map(diff, [N1, N1, N1, N2, N2, N2, N3, N3, N3, N4, N4, N4,\
+                    N5, N5, N5, N6, N6, N6, N7, N7, N7, N8, N8, N8], zxlist))
     B = Matrix([B0, B1, B2, B3, B4, B5])
 
     # Create constitutive (material property) matrix:
@@ -77,19 +78,19 @@ else:
     CB = C * B
 
     # Create delB matrix:
-    delCB0x = array(map(diff, CB[0, :], xlist))
-    delCB0y = array(map(diff, CB[3, :], ylist))
-    delCB0z = array(map(diff, CB[5, :], zlist))
+    delCB0x = array(tuple(map(diff, CB[0, :], xlist)))
+    delCB0y = array(tuple(map(diff, CB[3, :], ylist)))
+    delCB0z = array(tuple(map(diff, CB[5, :], zlist)))
     delCB0 = delCB0x + delCB0y + delCB0z
 
-    delCB1y = array(map(diff, CB[1, :], ylist))
-    delCB1x = array(map(diff, CB[3, :], xlist))
-    delCB1z = array(map(diff, CB[4, :], zlist))
+    delCB1y = array(tuple(map(diff, CB[1, :], ylist)))
+    delCB1x = array(tuple(map(diff, CB[3, :], xlist)))
+    delCB1z = array(tuple(map(diff, CB[4, :], zlist)))
     delCB1 = delCB1x + delCB1y + delCB1z
 
-    delCB2z = array(map(diff, CB[2, :], zlist))
-    delCB2y = array(map(diff, CB[4, :], ylist))
-    delCB2x = array(map(diff, CB[5, :], xlist))
+    delCB2z = array(tuple(map(diff, CB[2, :], zlist)))
+    delCB2y = array(tuple(map(diff, CB[4, :], ylist)))
+    delCB2x = array(tuple(map(diff, CB[5, :], xlist)))
     delCB2 = delCB2x + delCB2y + delCB2z
 
     Bbar = Matrix([delCB0.tolist(), delCB1.tolist(), delCB2.tolist()])

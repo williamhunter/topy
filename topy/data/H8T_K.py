@@ -12,16 +12,17 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
-
 from __future__ import division
-import os
-from sympy import symbols, Matrix, diff, integrate, zeros
 
+import os
+
+from sympy import symbols, Matrix, diff, integrate, zeros
 from numpy import abs, array
 
-from matlcons import *
-import logging
-logger = logging.getLogger(__name__)
+from ..utils import get_logger
+from .matlcons import *
+
+logger = get_logger(__name__)
 # Get file name:
 fname = __file__.split('_')[0] + '.K'
 
@@ -48,9 +49,9 @@ else:
     N8 = (a - x) * (b + y) * (c + z) / (8 * a * b * c)
 
     # Create strain-displacement matrix B:
-    B0 = map(diff, [N1, N2, N3, N4, N5, N6, N7, N8], xlist)
-    B1 = map(diff, [N1, N2, N3, N4, N5, N6, N7, N8], ylist)
-    B2 = map(diff, [N1, N2, N3, N4, N5, N6, N7, N8], zlist)
+    B0 = tuple(map(diff, [N1, N2, N3, N4, N5, N6, N7, N8], xlist))
+    B1 = tuple(map(diff, [N1, N2, N3, N4, N5, N6, N7, N8], ylist))
+    B2 = tuple(map(diff, [N1, N2, N3, N4, N5, N6, N7, N8], zlist))
     B = Matrix([B0, B1, B2])
 
     # Create conductivity matrix:
