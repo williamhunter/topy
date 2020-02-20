@@ -16,8 +16,7 @@ from numpy import arange, asarray, hstack
 from pyvtk import CellData, LookupTable, Scalars, UnstructuredGrid, VtkData
 
 __all__ = ['create_2d_imag', 'create_3d_geom', 'node_nums_2d', 'node_nums_3d',
-           'create_2d_msh', 'create_3d_msh']
-
+'create_2d_msh','create_3d_msh']
 
 def create_2d_imag(x, **kwargs):
     """
@@ -54,8 +53,8 @@ def create_2d_imag(x, **kwargs):
     # === Start of Matplotlib commands ===
     # ====================================
     # x = flipud(x) #  Check your matplotlibrc file; might plot upside-down...
-    figure()  # open a figure
-    if 'title' in kwargs:
+    figure() # open a figure
+    if kwargs.has_key('title'):
         title(kwargs['title'])
         imshow(-x, cmap=cm.gray, aspect='equal', interpolation='nearest')
     imshow(-x, cmap=cm.gray, aspect='equal', interpolation='nearest')
@@ -72,8 +71,7 @@ def create_2d_imag(x, **kwargs):
     fname = _change_fname(fname_dict, kwargs)
     # Save the domain as image:
     savefig(fname, bbox_inches='tight')
-    close()  # close the figure
-
+    close() # close the figure
 
 def create_3d_geom(x, **kwargs):
     """
@@ -116,7 +114,6 @@ def create_3d_geom(x, **kwargs):
     # Save the domain as geometry:
     _write_geom(x, fname)
 
-
 def create_2d_msh(nelx, nely, fname):
     """
     Create a 2d Gmsh MSH ASCII file by specifying the number of elements in the
@@ -153,7 +150,7 @@ def create_2d_msh(nelx, nely, fname):
         outputfile.write(MSH_header)
         # MSH nodes
         outputfile.write(MSH_nodes[0])
-        outputfile.write(str(nnodes) + '\n')
+        outputfile.write(str(nnodes)+'\n')
         nodenum = 1
         for x in xcoords:
             for y in ycoords:
@@ -163,14 +160,13 @@ def create_2d_msh(nelx, nely, fname):
         outputfile.write(MSH_nodes[1])
         # MSH elements
         outputfile.write(MSH_elements[0])
-        outputfile.write(str(nelms) + '\n')
+        outputfile.write(str(nelms)+'\n')
         # elm-number elm-type number-of-tags < tag > ... node-number-list
         for elem in arange(1, nelms + 1):
-            outputfile.write(str(elem) + ' 3 0 ')  # 3 is a 4-node quadrangle
+            outputfile.write(str(elem) + ' 3 0 ') # 3 is a 4-node quadrangle
             nn = node_nums_2d(nelx, nely, elem)
             outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[3]) + ' ' + str(nn[2]) + '\n')
         outputfile.write(MSH_elements[1])
-
 
 def create_3d_msh(nelx, nely, nelz, fname):
     """
@@ -221,15 +217,14 @@ def create_3d_msh(nelx, nely, nelz, fname):
         outputfile.write(MSH_nodes[1])
         # MSH elements
         outputfile.write(MSH_elements[0])
-        outputfile.write(str(nelms) + '\n')
+        outputfile.write(str(nelms)+'\n')
         # elm-number elm-type number-of-tags < tag > ... node-number-list
         for elem in arange(1, nelms + 1):
-            outputfile.write(str(elem) + ' 5 0 ')  # 5 is a 8-node hexahedron
+            outputfile.write(str(elem) + ' 5 0 ') # 5 is a 8-node hexahedron
             nn = node_nums_3d(nelx, nely, nelz, elem)
-            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[3]) + ' ' + str(nn[2]) + ' ' +
+            outputfile.write(str(nn[0]) + ' ' + str(nn[1]) + ' ' + str(nn[3]) + ' ' + str(nn[2]) + ' ' + \
                              str(nn[4]) + ' ' + str(nn[5]) + ' ' + str(nn[7]) + ' ' + str(nn[6]) + '\n')
         outputfile.write(MSH_elements[1])
-
 
 def node_nums_2d(nelx, nely, en):
     """
@@ -256,10 +251,9 @@ def node_nums_2d(nelx, nely, en):
     """
     if en > nelx * nely:
         raise Exception('Mesh does not contain specified element number.')
-    inn = asarray([0, 1, nely + 1, nely + 2])  # initial node numbers
-    nn = inn + (en + (en - 1) // nely)  # the element's node numbers
+    inn = asarray([0, 1, nely + 1, nely + 2]) #  initial node numbers
+    nn = inn + (en + (en - 1) // nely) #  the element's node numbers
     return nn
-
 
 def node_nums_3d(nelx, nely, nelz, en):
     """
@@ -290,24 +284,24 @@ def node_nums_3d(nelx, nely, nelz, en):
     xygridsize = nelx * nely
     if en > nelx * nely * nelz:
         raise Exception('Mesh does not contain specified element number.')
-    pen = en % (xygridsize)  # projected element number on rearmost face
+    pen = en % (xygridsize) #  projected element number on rearmost face
     if pen == 0:
         pen = xygridsize
 
-    nnzero = node_nums_2d(nelx, nely, pen)  # node numbers at rearmost face
+    nnzero = node_nums_2d(nelx, nely, pen) #  node numbers at rearmost face
     zinc = (en - 1) // xygridsize * (nelx + 1) * (nely + 1)
     nnr = nnzero + zinc
     nnf = nnr + (nelx + 1) * (nely + 1)
-    nn = hstack((nnr, nnf))
+    nn = hstack( (nnr, nnf) )
     return nn
-
 
 # =====================================
 # === Private functions and helpers ===
 # =====================================
 def _change_fname(fd, kwargs):
     # Default file name:
-    filename = fd['dflt_prefix'] + '_' + fd['dflt_iternum'] + fd['dflt_timestamp'] + '.' + fd['dflt_filetype']
+    filename = fd['dflt_prefix'] + '_' + fd['dflt_iternum'] + \
+    fd['dflt_timestamp'] + '.' + fd['dflt_filetype']
 
     # This is not pretty but it works...
     if 'prefix' in kwargs:
@@ -322,12 +316,11 @@ def _change_fname(fd, kwargs):
         filename = filename.replace(fd['dflt_timestamp'], '')
     if 'dir' in kwargs:
         dir = kwargs['dir']
-        if not dir[-1] == '/':
+        if not  dir[-1] == '/':
             dir = dir + '/'
         filename = dir + filename
 
     return filename
-
 
 def _write_geom(x, fname):
     '''
@@ -339,7 +332,6 @@ def _write_geom(x, fname):
         print('Other file formats not implemented, only legacy VTK.')
         #_write_vrml2(x, fname) # future
 
-
 def _write_legacy_vtu(x, fname):
     """
     Write a legacy VTK unstructured grid file.
@@ -350,16 +342,9 @@ def _write_legacy_vtu(x, fname):
     THRESHOLD = 0.001
 
     # Voxel local points relative to its centre of geometry:
-    voxel_local_points = asarray([
-        [-1, -1, -1],
-        [1, -1, -1],
-        [-1, 1, -1],
-        [1, 1, -1],
-        [-1, -1, 1],
-        [1, -1, 1],
-        [-1, 1, 1],
-        [1, 1, 1]
-    ]) * 0.5  # scaling
+    voxel_local_points = asarray([[-1,-1,-1],[ 1,-1,-1],[-1, 1,-1],[ 1, 1,-1],
+                                [-1,-1, 1],[ 1,-1, 1],[-1, 1, 1],[ 1, 1, 1]])\
+                                  * 0.5 # scaling
     # Voxel world points:
     points = []
     # Culled input array -- as list:
@@ -370,20 +355,22 @@ def _write_legacy_vtu(x, fname):
     except ValueError:
         sys.exit('Array dimensions not equal to 3, possibly 2-dimensional.\n')
 
-    for i in range(depth):
-        for j in range(rows):
-            for k in range(columns):
-                if x[i, j, k] > THRESHOLD:
-                    xculled.append(x[i, j, k])
-                    points += (voxel_local_points + [i, j, k]).tolist()
+    for i in xrange(depth):
+        for j in xrange(rows):
+            for k in xrange(columns):
+                if x[i,j,k] > THRESHOLD:
+                    xculled.append(x[i,j,k])
+                    points += (voxel_local_points + [i,j,k]).tolist()
 
     voxels = arange(len(points)).reshape(len(xculled), 8).tolist()
-    topology = UnstructuredGrid(points, voxel=voxels)
-    file_header = 'ToPy data, created ' + str(datetime.now()).rsplit('.')[0]
-    scalars = CellData(Scalars(xculled, name='Densities', lookup_table='default'))
+    topology = UnstructuredGrid(points, voxel = voxels)
+    file_header = \
+    'ToPy data, created '\
+    + str(datetime.now()).rsplit('.')[0]
+    scalars = CellData(Scalars(xculled, name='Densities', lookup_table =\
+    'default'))
     vtk = VtkData(topology, file_header, scalars)
     vtk.tofile(fname, 'binary')
-
 
 def _timestamp():
     """
@@ -399,7 +386,6 @@ def _timestamp():
     ts = day + '-' + month + '-' + year + '-' + hour + 'h' + minute
     return ts
 
-
 def _fixstring(s):
     """
     Fix the string by adding a zero in front if single digit number.
@@ -408,7 +394,6 @@ def _fixstring(s):
     if len(s) == 1:
         s = '0' + s
     return s
-
 
 def _fixiternum(s):
     """
@@ -421,4 +406,5 @@ def _fixiternum(s):
     elif len(s) == 1:
         s = '00' + s
     return s
+
 # EOF visualisation.py
