@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Python cache
+.mypy_cache/
+
 # C extensions
 *.so
 
@@ -78,6 +81,9 @@ tutorial/
 examples/*/*.png
 examples/*/*.vtk
 *.msh
+
+# VSCode
+.vscode/
 
 # DON'T (!) ignore what's inside imgsrc
 !imgsrc/*
