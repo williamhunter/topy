@@ -8,17 +8,15 @@
 # Copyright (C) 2008, 2015, William Hunter.
 # =============================================================================
 """
-
-
-import logging
 from os import path
 
 from numpy import array, linspace, unique, sqrt, round, load
 from numpy.linalg import eigvalsh
 
+from .utils import get_logger
 from .data.matlcons import _a, _nu, _E
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 __all__ = ['Q4', 'Q5B',  'Q4a5B',  'Q4T',\
            'H8', 'H18B', 'H8T']

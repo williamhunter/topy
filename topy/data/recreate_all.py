@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 
+from __future__ import division
+
 from os import system, name
-import logging
-logger = logging.getLogger(__name__)
+
+from ..utils import get_logger
+
+logger = get_logger(__name__)
 
 if name == 'posix':
     system('rm Q4.K')
