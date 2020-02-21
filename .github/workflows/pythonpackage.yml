@@ -18,7 +18,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          conda install -f tests/spec-list.txt
+          conda install --file=tests/spec-list.txt
       - name: Install ToPy
         run: |
           cd topy
