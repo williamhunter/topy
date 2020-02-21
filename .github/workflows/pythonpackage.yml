@@ -18,11 +18,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          conda env create -f conda.yaml
-          conda activate topy
+          conda install -f tests/spec-list.txt
+      - name: Install ToPy
+        run: |
           cd topy
           python setup.py install
           cd ..
-      - name: Test with pytest
+      - name: Run pytest
         run: |
           pytest
