@@ -6,14 +6,19 @@
 # Copyright (C) 2008, 2015, 2016, 2017 William Hunter.
 # =============================================================================
 """
-
-
-
+import os
 import sys
 from datetime import datetime
-from pylab import axis, close, cm, figure, imshow, savefig, title
+
 from numpy import arange, asarray, hstack
 from pyvtk import CellData, LookupTable, Scalars, UnstructuredGrid, VtkData
+
+# Instruct matplotlib to use the 'Agg' if no display was detected, as matplotlib uses a GUI by default.
+#   From: https://stackoverflow.com/a/8258144/9954163.
+if not os.environ.get("DISPLAY"):
+    import matplotlib
+    matplotlib.use('Agg')
+from pylab import axis, close, cm, figure, imshow, savefig, title
 
 __all__ = ['create_2d_imag', 'create_3d_geom', 'node_nums_2d', 'node_nums_3d',
 'create_2d_msh','create_3d_msh']

@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 __all__ = ['optimise']
 
 def optimise(topology, save=True, dir='./iterations'):
-
+    # type: (Topology, bool, str) -> None
     if not path.exists(dir):
         makedirs(dir)
     etas_avg = []
