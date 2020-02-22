@@ -21,7 +21,7 @@ jobs:
           conda install --file=tests/spec-list.txt
       - name: Install ToPy
         run: |
-          python setup.py install
+          pip install .
       - name: Run pytest
         run: |
           pytest
