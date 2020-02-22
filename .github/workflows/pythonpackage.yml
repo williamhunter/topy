@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Miniconda
+      - name: Install dependencies
         uses: goanpeca/setup-miniconda@v1.0.2
         with:
           auto-update-conda: true
@@ -19,10 +19,6 @@ jobs:
           environment-file: conda.yml
           python-version: ${{ matrix.python-version }}
           auto-activate-base: false
-      - name: Install dependencies
-        shell: bash -l {0}
-        run: |
-          conda install --file=tests/spec-list.txt
       - name: Install ToPy
         shell: bash -l {0}
         run: |
