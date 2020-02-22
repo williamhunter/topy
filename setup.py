@@ -20,10 +20,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/williamhunter/topy",
     packages=["topy", "topy.data"],
+    install_requires=['typing', 'pathlib', 'matplotlib', 'sympy', 'numpy<=1.14', 'pyvtk', 'pysparse'],
     classifiers=[
         "Programming Language :: Python :: 2",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='==2.7.15',
+    python_requires='~=2.7',
 )
