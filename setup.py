@@ -5,14 +5,25 @@ ToPy install script.
 Install ToPy through `python setup.py install`.
 """
 
+import sys
 import setuptools
+
+# Allow input of version from commandline.
+for i, arg in enumerate(sys.argv):
+    print(arg)
+    if arg.startswith("--version="):
+        version = sys.argv.pop(i).split("=")[1]
+        break
+else:
+    version = "0.4.0"
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="ToPy",
-    version="0.4.0",
+    name="topy-mlaradji",
+    version=version,
     author="William Hunter",
     author_email="williamhunter@users.noreply.github.com",
     description="Topology optimization with Python",
