@@ -1,4 +1,4 @@
-![Python test](https://github.com/mlaradji/topy/workflows/Python%20test/badge.svg?branch=master)
+![pytest](https://github.com/mlaradji/topy/workflows/pytest/badge.svg)
 
 # ToPy
 <div align="center">
