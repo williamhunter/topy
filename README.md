@@ -1,3 +1,5 @@
+![Python test](https://github.com/mlaradji/topy/workflows/Python%20test/badge.svg?branch=master)
+
 # ToPy
 <div align="center">
 	<img src="./imgsrc/topy_logo3d.png" width="400">
