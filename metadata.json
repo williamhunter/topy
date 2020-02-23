@@ -1,0 +1,8 @@
+{
+    "name": "topology-optimization",
+    "version": "0.4.0",
+    "author": "William Hunter",
+    "author_email": "williamhunter@users.noreply.github.com",
+    "description": "Topology optimization with Python",
+    "url": "https://github.com/williamhunter/topy"
+}
