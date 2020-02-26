@@ -1,6 +1,6 @@
 name: pytest
 
-on: 
+on:
   pull_request:
   push:
     branches:
@@ -14,7 +14,9 @@ jobs:
         python-version: [2.7]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Install dependencies
         uses: goanpeca/setup-miniconda@v1.0.2
         with:
@@ -23,11 +25,29 @@ jobs:
           environment-file: conda.yml
           python-version: ${{ matrix.python-version }}
           auto-activate-base: false
+
       - name: Install ToPy
         shell: bash -l {0}
         run: |
           pip install .
-      - name: Run pytest
+
+      - name: Run pytest with benchmark
         shell: bash -l {0}
         run: |
-          pytest
+          pytest --benchmark-json benchmark.json --benchmark-group-by param:filename
+
+      - name: Download previous benchmark data
+        uses: actions/cache@v1
+        with:
+          path: ./cache
+          key: ${{ runner.os }}-benchmark
+
+      - name: Store benchmark result
+        uses: rhysd/github-action-benchmark@v1
+        with:
+          name: Python Benchmark with pytest-benchmark
+          tool: "pytest"
+          output-file-path: benchmark.json
+          external-data-json-path: ./cache/benchmark-data.json
+          fail-on-alert: true
+          alert-threshold: '200%'
