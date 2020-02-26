@@ -1,4 +1,4 @@
-name: mlaradji.topy.dev.p2
+name: topy
 channels:
   - freecad/label/dev
   - pytorch
@@ -95,8 +95,5 @@ dependencies:
   - zipp=1.0.0=py_0
   - zlib=1.2.11=h516909a_1006
   - pip:
-    - mypy-extensions==0.4.3
-    - pyannotate==1.2.0
-    - topology-optimization==0.4.0
-prefix: /home/mohamed/.conda/miniconda3/envs/mlaradji.topy.dev.p2
-
+      - mypy-extensions==0.4.3
+      - pyannotate==1.2.0
