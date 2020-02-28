@@ -23,4 +23,4 @@ def test_optimise(filename, benchmark):
     t = topy.Topology()
     t.load_tpd_file(filename)
     t.set_top_params()
-    benchmark.pedantic(topy.optimise, args=(t,), iterations=1, rounds=1)
+    benchmark(topy.optimise, t)
