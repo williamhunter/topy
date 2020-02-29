@@ -34,7 +34,7 @@ jobs:
       - name: Run pytest with benchmark
         shell: bash -l {0}
         run: |
-          pytest --benchmark-min-rounds 1 --benchmark-max-time 800 --benchmark-json benchmark.json --benchmark-group-by param:filename
+          pytest --benchmark-json benchmark.json
 
       - name: Download previous benchmark data
         uses: actions/cache@v1
