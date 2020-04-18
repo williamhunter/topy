@@ -1,3 +1,5 @@
+![pytest](https://github.com/mlaradji/topy/workflows/pytest/badge.svg)
+
 # ToPy
 <div align="center">
 	<img src="./imgsrc/topy_logo3d.png" width="400">
