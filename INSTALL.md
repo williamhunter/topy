@@ -1,5 +1,5 @@
 # Dependencies
-There always are... It shouldn't take more than a few minutes to download and install everything.
+It shouldn't take you more than a few minutes to download and install everything.
 
 ## All platforms
 Install Python 2.7.13 (32 or 64 bit) - make sure your 'bitness' is correct
@@ -24,6 +24,9 @@ I have a 'real' job.
 
 The same is of course not true for Linux/Mac systems, so you may very well be
 able to get ToPy to work with Python 3.x -- I've not tried.
+
+**Consider to use a virtual Python 2.7 environment, using `pyenv` or `conda`
+or one of the other tools available to set up virtual environments for Python.**
 
 ## Windows
 1. Make sure Python is in your 'Path' Environment Variables. *How?*
