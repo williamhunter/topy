@@ -9,6 +9,9 @@ ToPy is a lightweight topology optimization framework for Python that can solve
 compliance (stiffness), mechanism synthesis and heat conduction problems in 2D and 3D.
 Please refer to the [ToPy Wiki](https://github.com/williamhunter/topy/wiki) for further information.
 
+## Example of a ToPy result
+An [example TPD file and solution/result](https://github.com/williamhunter/ToPy/wiki/Examples-of-ToPy-results)
+
 ## Installation
 Once you've downloaded the dependencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
 file) all you need to do is the following:
@@ -138,11 +141,8 @@ convert -delay 35 *.png anim.gif
 ## Tutorials
 [Tutorials](https://github.com/williamhunter/topy/wiki/Tutorials)
 
-## Solved example
-An [example TPD file and solution/result](https://github.com/williamhunter/ToPy/wiki/Examples-of-ToPy-results)
-
 ## How to cite ToPy
-If you've used ToPy in your research work, please consider to cite:
+If you've used ToPy in your research work or find it useful in any way, please consider to cite:
 ```
 @misc{Hunter2007william,
   author = {Hunter, William and others},
