@@ -70,6 +70,8 @@ also work fine (in that ToPy should still work).
 If everything installed correctly, you're ready to install ToPy.
 
 # Installing ToPy
+Download the stable topy release or clone.
+
 CD into the 'topy' directory (where 'setup.py' is located) and
 in a terminal ('cmd' on Windows), type:
 
@@ -116,4 +118,5 @@ solving a problem by simply running 'optimise.py' in the 'scripts' folder.
 --
 
 William Hunter
-Date: 2017-08-21
+Created: 2017-08-21
+Last update: 2020-04-26
