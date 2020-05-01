@@ -13,10 +13,13 @@ Please refer to the [ToPy Wiki](https://github.com/williamhunter/topy/wiki) for 
 An [example TPD file and solution/result](https://github.com/williamhunter/ToPy/wiki/Examples-of-ToPy-results)
 
 ## Installation
+**NOTE**: I've added a 0.4.1 release, which is older then the master branch, but will get you up and running with Python 2 and
+Pysparse if you're willing to use the Anaconda Python distribution
+
 Once you've downloaded the dependencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
 file) all you need to do is the following:
 
-Download the latest **stable release** from here: https://github.com/williamhunter/topy/releases/tag/v0.4.1
+Download the latest **stable release** from here: https://github.com/williamhunter/topy/releases/tag/latest
 
 Then do
 
@@ -24,8 +27,6 @@ Then do
 $ cd topy/topy
 $ python setup.py install
 ```
-
-<span style="background-color: #FFFF00">**NOTE**: I've added a 0.4.1 release, which is older then the master branch, but will get you up and running with Python 2 and Pysparse if you're willing to use the Anaconda Python distribution</span>
 
 
 ### ToPy and Python 3
