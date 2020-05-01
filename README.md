@@ -19,7 +19,7 @@ Pysparse if you're willing to use the Anaconda Python distribution
 Once you've downloaded the dependencies (see the [INSTALL](https://github.com/williamhunter/topy/blob/master/INSTALL.md)
 file) all you need to do is the following:
 
-Download the latest **stable release** from here: https://github.com/williamhunter/topy/releases/tag/latest
+Download the latest **stable release** from here: https://github.com/williamhunter/topy/releases/latest
 
 Then do
 
