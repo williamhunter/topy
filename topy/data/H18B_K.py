@@ -20,12 +20,12 @@ from sympy import symbols, Matrix, diff, integrate, zeros, eye
 from numpy import abs, array, transpose, dot
 from numpy.linalg import inv
 
-from ..utils import get_logger
+from ..utils import get_logger, get_data_file
 from .matlcons import *
 
 logger = get_logger(__name__)
 # Get file name:
-fname = __file__.split('_')[0] + '.K'
+fname = get_data_file(__file__)
 
 if os.path.exists(fname):
     logger.info('{} (stiffness matrix) exists!'.format(fname))
