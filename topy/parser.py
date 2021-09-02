@@ -156,17 +156,17 @@ def _parse_dict(d):
 
     # Check for active elements:
     try:
-        d['ACTV_ELEM'] = _tpd2vec(d['ACTV_ELEM']) - 1
+        d['ACTV_ELEM'] = _tpd2vec(d['ACTV_ELEM'], int) - 1
     except KeyError:
-        d['ACTV_ELEM'] = _tpd2vec('')
+        d['ACTV_ELEM'] = _tpd2vec('', int)
     except AttributeError:
         pass
 
     # Check for passive elements:
     try:
-        d['PASV_ELEM'] = _tpd2vec(d['PASV_ELEM']) - 1
+        d['PASV_ELEM'] = _tpd2vec(d['PASV_ELEM'], int) - 1
     except KeyError:
-        d['PASV_ELEM'] = _tpd2vec('')
+        d['PASV_ELEM'] = _tpd2vec('', int)
     except AttributeError:
         pass
 
@@ -217,7 +217,7 @@ def _parse_dict(d):
 
     return d
 
-def _tpd2vec(seq):
+def _tpd2vec(seq, dtype=float):
     """
     Convert a tpd file string to a vector, return a NumPy array.
 
@@ -230,23 +230,23 @@ def _tpd2vec(seq):
         array([], dtype=float64)
 
     """
-    finalvec = np.array([], int)
+    finalvec = np.array([], dtype)
     for s in seq.split(';'):
         if s.count('|'):
-            values = [int(v) for v in s.split('|')]
+            values = [dtype(v) for v in s.split('|')]
             values[1] += 1
             vec = np.arange(*values)
         elif s.count('@'):
             value, num = s.split('@')
             try:
-                vec = np.ones(int(num)) * float(value)
+                vec = np.ones(int(num)) * dtype(value)
             except ValueError:
                 raise ValueError('%s is incorrectly specified' % seq)
         else:
             try:
-                vec = [float(s)]
+                vec = [dtype(s)]
             except ValueError:
-                vec = np.array([])
+                vec = np.array([], dtype)
         finalvec = np.append(finalvec, vec)
     return finalvec
 
