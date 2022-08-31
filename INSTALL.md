@@ -47,7 +47,7 @@ http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy
 and install with `pip`
 3. Download Pysparse, also from
 http://www.lfd.uci.edu/~gohlke/pythonlibs/#pysparse
-and install with `pip`
+and install with `pip`. **Please make sure** that NumPy is installed first.
 4. Install matplotlib via `pip`
 5. Install SymPy via `pip`
 6. Install PyVTK via `pip`
